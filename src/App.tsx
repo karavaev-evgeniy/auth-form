@@ -1,8 +1,11 @@
+import AuthForm from "./components/AuthForm/AuthForm.tsx";
+import "./styles/app.css";
+
 function App() {
   return (
-    <>
-      Auth Form
-    </>
+    <div className="app">
+        <AuthForm/>
+    </div>
   )
 }
 
