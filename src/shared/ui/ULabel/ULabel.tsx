@@ -1,5 +1,4 @@
 import type { LabelHTMLAttributes } from "react";
-import "./ULabel.scss";
 
 interface ULabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 	// Здесь можно добавить кастомные props, если они нужны

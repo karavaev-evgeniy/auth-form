@@ -50,7 +50,9 @@ function AuthForm() {
 			<form className="auth-form" onSubmit={handleSubmit}>
 				<div className="auth-form__fields">
 					<div className="auth-form__row">
-						<ULabel htmlFor="email">Email</ULabel>
+						<ULabel className="auth-form__label" htmlFor="email">
+							Email
+						</ULabel>
 
 						<UInput
 							id="email"
@@ -67,7 +69,9 @@ function AuthForm() {
 					</div>
 
 					<div className="auth-form__row">
-						<ULabel htmlFor="password">Password</ULabel>
+						<ULabel className="auth-form__label" htmlFor="password">
+							Password
+						</ULabel>
 
 						<UInputPassword
 							id="password"
