@@ -1,8 +1,11 @@
 import UButton from "@shared/ui/UButton/UButton.tsx";
 import UInput from "@shared/ui/UInput/UInput.tsx";
 import ULabel from "@shared/ui/ULabel/ULabel.tsx";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./AuthForm.scss";
+import { StoreContext } from "@app/providers/StoreProvider";
+import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import UInputPassword from "../../../../shared/ui/UInputPassword/UInputPassword.tsx";
 
@@ -11,7 +14,10 @@ const schema = z.object({
 	password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
-function AuthForm() {
+const AuthForm = observer(() => {
+	const { authStore } = useContext(StoreContext);
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({ email: "", password: "" });
@@ -42,6 +48,8 @@ function AuthForm() {
 
 		if (validateForm()) {
 			console.log("Form is valid. Submitting...");
+			authStore.login({ email });
+			navigate("/"); // Редирект на главную страницу после успешной авторизации
 		}
 	};
 
@@ -95,6 +103,6 @@ function AuthForm() {
 			</form>
 		</>
 	);
-}
+});
 
 export default AuthForm;
