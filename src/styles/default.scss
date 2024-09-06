@@ -2,12 +2,16 @@
     --font-martian: 'Martian Mono', sans-serif;
 
     /* Colors */
+    --color-black: oklch(0% 0% 0deg);
     --color-white: oklch(100% 0% 90deg);
     --color-alto: oklch(94% 2% 243deg);
     --color-silver: oklch(80.15% 0 0);
+    --color-patina: oklch(60% 13% 176deg);
+    --color-orange: oklch(71% 48% 44deg);
 
     /* Shadows */
-    --neo-shadow: -5px 5px 15px var(--color-silver), 5px -5px 15px var(--color-white);
+    --shadow-alto: -5px 5px 15px var(--color-silver), 5px -5px 15px var(--color-white);
+    --shadow-patina: -5px 5px 15px var(--color-patina), 5px -5px 15px var(--color-white);
 
     /* Border radius */
     --radius-normal: 1rem;

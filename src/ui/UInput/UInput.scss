@@ -1,0 +1,25 @@
+.u-input {
+    display: block;
+
+    width: 100%;
+    padding: 2rem;
+
+    font-size: 1rem;
+    font-family: var(--font-martian);
+
+    background-color: var(--color-alto);
+    box-shadow: var(--shadow-alto);
+    border-radius: var(--radius-normal);
+    border: 2px solid transparent;
+
+    transition: all 0.2s ease-in-out;
+
+    &:focus {
+        border-color: var(--color-orange);
+        outline: none;
+    }
+
+    &::placeholder {
+        color: var(--color-silver);
+    }
+}

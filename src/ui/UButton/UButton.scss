@@ -1,0 +1,30 @@
+.u-button {
+    display: block;
+    padding: 2rem;
+
+    color: var(--color-white);
+    font-size: 1rem;
+    font-family: var(--font-martian);
+
+    background: var(--color-patina);
+    box-shadow: var(--shadow-patina);
+    border-radius: 1rem;
+    border: 2px solid transparent;
+
+    transition: all 0.2s ease-in-out;
+
+    cursor: pointer;
+
+    &:focus {
+        border-color: var(--color-orange);
+        outline: none;
+    }
+
+    &:disabled {
+        color: var(--color-silver);
+        background: var(--color-alto);
+        box-shadow:  var(--shadow-alto);
+
+        cursor: default;
+    }
+}
