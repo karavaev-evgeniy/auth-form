@@ -1,5 +1,5 @@
 import AuthForm from "@user/components/AuthForm/AuthForm.tsx";
-import "@shared/styles/app.scss";
+import "./App.scss";
 
 function App() {
 	return (

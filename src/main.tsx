@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import App from "./app/App.tsx";
 import "@shared/styles/default.scss";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
