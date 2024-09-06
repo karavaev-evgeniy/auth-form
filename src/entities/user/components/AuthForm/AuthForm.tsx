@@ -4,6 +4,7 @@ import ULabel from "@shared/ui/ULabel/ULabel.tsx";
 import { useState } from "react";
 import "./AuthForm.scss";
 import { z } from "zod";
+import UInputPassword from "../../../../shared/ui/UInputPassword/UInputPassword.tsx";
 
 const schema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -68,10 +69,9 @@ function AuthForm() {
 					<div className="auth-form__row">
 						<ULabel htmlFor="password">Password</ULabel>
 
-						<UInput
+						<UInputPassword
 							id="password"
 							name="password"
-							type="password"
 							placeholder="*"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
