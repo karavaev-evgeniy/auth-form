@@ -1,11 +1,16 @@
-import AuthForm from "@user/components/AuthForm/AuthForm.tsx";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import "./App.scss";
 
 function App() {
 	return (
-		<div className="app">
-			<AuthForm />
-		</div>
+		<Router>
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+				<Route path="/login" element={<LoginPage />} />
+			</Routes>
+		</Router>
 	);
 }
 
