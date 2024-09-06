@@ -3,13 +3,15 @@
     flex-direction: column;
     gap: 3rem;
 
-    min-width: 50vw;
-    min-height: 50vh;
-    padding: 4rem;
+    @media (min-width: 768px) {
+        min-width: 50vw;
+        min-height: 50vh;
+        padding: 4rem;
 
-    box-shadow: var(--shadow-alto);
-    background-color: var(--color-alto);
-    border-radius: var(--radius-normal);
+        box-shadow: var(--shadow-alto);
+        background-color: var(--color-alto);
+        border-radius: var(--radius-normal);
+    }
 
     &__fields {
         display: flex;
@@ -28,10 +30,21 @@
     }
 
     &__button {
-        width: 50%;
+        width: 100%;
+
+        @media (min-width: 768px) {
+            width: 50%;
+        }
     }
 
     &__error {
         color: var(--color-orange);
+        font-size: 14px;
+        line-height: 20px;
+
+        @media (min-width: 768px) {
+            font-size: 16px;
+            line-height: 22px;
+        }
     }
 }

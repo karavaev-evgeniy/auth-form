@@ -4,14 +4,28 @@
   justify-content: center;
 
   min-height: 100vh;
+  padding: 0 2rem;
 
   &__grid {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
+    max-width: 768px;
+    width: 100%;
   }
 
   &__title {
-    padding: 0 4rem;
+    margin: 0;
+
+    font-size: 22px;
+    line-height: 28px;
+
+    @media (min-width: 768px) {
+      padding: 0 4rem;
+
+      font-size: 28px;
+      line-height: 34px;
+    }
   }
 }

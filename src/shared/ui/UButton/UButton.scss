@@ -1,6 +1,6 @@
 .u-button {
     display: block;
-    padding: 2rem;
+    padding: 1rem;
 
     color: var(--color-white);
     font-size: 1rem;
@@ -8,12 +8,17 @@
 
     background: var(--color-patina);
     box-shadow: var(--shadow-patina);
-    border-radius: var(--radius-normal);
+    border-radius: var(--radius-small);
     border: 2px solid transparent;
 
     transition: all 0.2s ease-in-out;
 
     cursor: pointer;
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+        border-radius: var(--radius-normal);
+    }
 
     &:focus {
         border-color: var(--color-orange);
