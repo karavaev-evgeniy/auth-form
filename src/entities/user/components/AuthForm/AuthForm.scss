@@ -30,4 +30,8 @@
     &__button {
         width: 50%;
     }
+
+    &__error {
+        color: var(--color-orange);
+    }
 }
