@@ -1,19 +1,19 @@
 import { StoreContext } from "@app/providers/StoreProvider";
-import AuthForm from "@user/components/AuthForm/AuthForm.tsx";
+import { useNavigation } from "@shared/hooks/useNavigation";
+import AuthForm from "@user/components/AuthForm/AuthForm";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./LoginPage.scss";
 
 const LoginPage = observer(() => {
 	const { authStore } = useContext(StoreContext);
-	const navigate = useNavigate();
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		if (authStore.isAuthenticated) {
-			navigate("/");
+			navigation.goToHome();
 		}
-	}, [authStore.isAuthenticated, navigate]);
+	}, [authStore.isAuthenticated, navigation]);
 
 	return (
 		<main className="login-page">

@@ -1,20 +1,25 @@
 import { StoreContext } from "@app/providers/StoreProvider";
-import UButton from "@shared/ui/UButton/UButton.tsx";
+import { useNavigation } from "@shared/hooks/useNavigation";
+import UButton from "@shared/ui/UButton/UButton";
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
 
 const HomePage = observer(() => {
 	const { authStore } = useContext(StoreContext);
-	const navigate = useNavigate();
+	const navigation = useNavigation();
+
+	useEffect(() => {
+		if (!authStore.isAuthenticated) {
+			navigation.goToLogin();
+		}
+	}, [authStore.isAuthenticated, navigation]);
 
 	const handleLogout = () => {
 		authStore.logout();
-		navigate("/login");
+		navigation.goToLogin();
 	};
 
 	if (!authStore.isAuthenticated) {
-		navigate("/login");
 		return null;
 	}
 

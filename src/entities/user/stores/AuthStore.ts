@@ -1,14 +1,15 @@
 import { makeAutoObservable } from "mobx";
+import type { IUser } from "../types/user";
 
 class AuthStore {
 	isAuthenticated = false;
-	user = null;
+	user: IUser | null = null;
 
 	constructor() {
 		makeAutoObservable(this);
 	}
 
-	login = (userData) => {
+	login = (userData: IUser) => {
 		this.isAuthenticated = true;
 		this.user = userData;
 	};

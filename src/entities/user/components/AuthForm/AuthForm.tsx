@@ -1,13 +1,13 @@
+import UInputPassword from "@/shared/ui/UInputPassword/UInputPassword.tsx";
+import { StoreContext } from "@app/providers/StoreProvider";
+import { useNavigation } from "@shared/hooks/useNavigation";
 import UButton from "@shared/ui/UButton/UButton.tsx";
 import UInput from "@shared/ui/UInput/UInput.tsx";
 import ULabel from "@shared/ui/ULabel/ULabel.tsx";
-import { useContext, useState } from "react";
-import "./AuthForm.scss";
-import { StoreContext } from "@app/providers/StoreProvider";
 import { observer } from "mobx-react-lite";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { z } from "zod";
-import UInputPassword from "../../../../shared/ui/UInputPassword/UInputPassword.tsx";
+import "./AuthForm.scss";
 
 const schema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -16,7 +16,7 @@ const schema = z.object({
 
 const AuthForm = observer(() => {
 	const { authStore } = useContext(StoreContext);
-	const navigate = useNavigate();
+	const navigation = useNavigation();
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -47,9 +47,8 @@ const AuthForm = observer(() => {
 		event.preventDefault();
 
 		if (validateForm()) {
-			console.log("Form is valid. Submitting...");
 			authStore.login({ email });
-			navigate("/"); // Редирект на главную страницу после успешной авторизации
+			navigation.goToHome();
 		}
 	};
 
