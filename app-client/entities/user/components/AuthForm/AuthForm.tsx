@@ -1,8 +1,8 @@
-import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword.tsx";
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { useNavigation } from "@client/shared/hooks/useNavigation";
 import UButton from "@client/shared/ui/UButton/UButton.tsx";
 import UInput from "@client/shared/ui/UInput/UInput.tsx";
+import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword.tsx";
 import ULabel from "@client/shared/ui/ULabel/ULabel.tsx";
 import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
@@ -20,35 +20,40 @@ const AuthForm = observer(() => {
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [errors, setErrors] = useState({ email: "", password: "" });
+	const [errors, setErrors] = useState({
+		email: "",
+		password: "",
+		general: "",
+	});
 
 	const validateForm = () => {
 		try {
 			schema.parse({ email, password });
-			setErrors({ email: "", password: "" });
-
+			setErrors({ email: "", password: "", general: "" });
 			return true;
 		} catch (error) {
 			if (error instanceof z.ZodError) {
-				const newErrors = { email: "", password: "" };
-
+				const newErrors = { email: "", password: "", general: "" };
 				for (const err of error.errors) {
 					if (err.path[0] === "email") newErrors.email = err.message;
 					if (err.path[0] === "password") newErrors.password = err.message;
 				}
-
 				setErrors(newErrors);
 			}
 			return false;
 		}
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		if (validateForm()) {
-			authStore.login({ email });
-			navigation.goToHome();
+			const success = await authStore.login(email, password);
+			if (success) {
+				navigation.goToHome();
+			} else {
+				setErrors({ ...errors, general: "Invalid email or password" });
+			}
 		}
 	};
 
@@ -93,6 +98,10 @@ const AuthForm = observer(() => {
 						)}
 					</div>
 				</div>
+
+				{errors.general && (
+					<div className="auth-form__error">{errors.general}</div>
+				)}
 
 				<div className="auth-form__controls">
 					<UButton className="auth-form__button" type="submit">
