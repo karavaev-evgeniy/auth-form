@@ -1,4 +1,4 @@
-import { authStore } from "@user/stores/AuthStore";
+import { authStore } from "@client/entities/user/stores/AuthStore";
 import React, { createContext } from "react";
 
 export const StoreContext = createContext({

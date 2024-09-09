@@ -1,4 +1,4 @@
-import { ROUTES } from "@app/types/router";
+import { ROUTES } from "@client/app/types/router";
 import { useNavigate } from "react-router-dom";
 
 export const useNavigation = () => {

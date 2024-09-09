@@ -1,7 +1,7 @@
-import HomePage from "@app/pages/HomePage/HomePage";
-import LoginPage from "@app/pages/LoginPage/LoginPage";
-import ProtectedRoute from "@app/router/ProtectedRoute";
-import { ROUTES } from "@app/types/router";
+import HomePage from "@client/app/pages/HomePage/HomePage";
+import LoginPage from "@client/app/pages/LoginPage/LoginPage";
+import ProtectedRoute from "@client/app/router/ProtectedRoute";
+import { ROUTES } from "@client/app/types/router";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 const AppRouter = () => {

@@ -1,5 +1,5 @@
-import { StoreContext } from "@app/providers/StoreProvider";
-import { ROUTES } from "@app/types/router";
+import { StoreContext } from "@client/app/providers/StoreProvider";
+import { ROUTES } from "@client/app/types/router";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";

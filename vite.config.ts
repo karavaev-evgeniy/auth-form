@@ -18,11 +18,8 @@ export default defineConfig({
 	],
 	resolve: {
 		alias: {
-			"@": path.resolve(__dirname, "./app-client"),
-			"@app": path.resolve(__dirname, "./app-client/app"),
-			"@shared": path.resolve(__dirname, "./app-client/shared"),
-			"@user": path.resolve(__dirname, "./app-client/entities/user"),
-			"@server": path.resolve(__dirname, "./app-server/server"),
+			"@client": path.resolve(__dirname, "./app-client"),
+			"@server": path.resolve(__dirname, "./app-server"),
 		},
 	},
 });

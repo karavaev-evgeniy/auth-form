@@ -1,17 +1,11 @@
 {
-	"compilerOptions": {
-		"baseUrl": "./",
-		"paths": {
-			"@/*": ["./app-client/*"],
-			"@server/*": ["./server/*"]
-		}
-	},
-	"files": [],
-	"references": [
-		{ "path": "./tsconfig.app.json" },
-		{ "path": "./tsconfig.node.json" },
-		{ "path": "./tsconfig.server.json" }
-	],
-	"include": ["app-client/**/*"],
-	"exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@client/*": ["./app-client/*"],
+      "@server/*": ["./app-server/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
+  }
 }

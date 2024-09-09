@@ -1,7 +1,7 @@
-import { StoreContext } from "@app/providers/StoreProvider";
-import { useNavigation } from "@shared/hooks/useNavigation";
-import UButton from "@shared/ui/UButton/UButton";
-import { trpc } from "@shared/utils/trpc";
+import { StoreContext } from "@client/app/providers/StoreProvider";
+import { useNavigation } from "@client/shared/hooks/useNavigation";
+import UButton from "@client/shared/ui/UButton/UButton";
+import { trpc } from "@client/shared/utils/trpc";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 

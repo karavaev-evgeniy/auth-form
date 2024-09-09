@@ -1,6 +1,6 @@
-import { StoreContext } from "@app/providers/StoreProvider";
-import { useNavigation } from "@shared/hooks/useNavigation";
-import AuthForm from "@user/components/AuthForm/AuthForm";
+import { StoreContext } from "@client/app/providers/StoreProvider";
+import { useNavigation } from "@client/shared/hooks/useNavigation";
+import AuthForm from "@client/entities/user/components/AuthForm/AuthForm";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 import "./LoginPage.scss";

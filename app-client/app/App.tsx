@@ -1,6 +1,6 @@
-import { StoreProvider } from "@app/providers/StoreProvider";
-import AppRouter from "@app/router/AppRouter";
-import { trpc } from "@shared/utils/trpc";
+import { StoreProvider } from "@client/app/providers/StoreProvider";
+import AppRouter from "@client/app/router/AppRouter";
+import { trpc } from "@client/shared/utils/trpc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import React, { useState } from "react";

@@ -1,9 +1,9 @@
-import UInputPassword from "@/shared/ui/UInputPassword/UInputPassword.tsx";
-import { StoreContext } from "@app/providers/StoreProvider";
-import { useNavigation } from "@shared/hooks/useNavigation";
-import UButton from "@shared/ui/UButton/UButton.tsx";
-import UInput from "@shared/ui/UInput/UInput.tsx";
-import ULabel from "@shared/ui/ULabel/ULabel.tsx";
+import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword.tsx";
+import { StoreContext } from "@client/app/providers/StoreProvider";
+import { useNavigation } from "@client/shared/hooks/useNavigation";
+import UButton from "@client/shared/ui/UButton/UButton.tsx";
+import UInput from "@client/shared/ui/UInput/UInput.tsx";
+import ULabel from "@client/shared/ui/ULabel/ULabel.tsx";
 import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import { z } from "zod";

@@ -1,9 +1,9 @@
-import UInput from "@shared/ui/UInput/UInput";
+import UInput from "@client/shared/ui/UInput/UInput";
 import type React from "react";
 import { useState } from "react";
 import "./UInputPassword.scss";
-import EyeSlashIcon from "@shared/icons/eye-slash.svg";
-import EyeIcon from "@shared/icons/eye.svg";
+import EyeSlashIcon from "@client/shared/icons/eye-slash.svg";
+import EyeIcon from "@client/shared/icons/eye.svg";
 
 interface PasswordInputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
