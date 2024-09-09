@@ -2,14 +2,16 @@
 	"compilerOptions": {
 		"baseUrl": "./",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./app-client/*"],
+			"@server/*": ["./server/*"]
 		}
 	},
 	"files": [],
 	"references": [
 		{ "path": "./tsconfig.app.json" },
-		{ "path": "./tsconfig.node.json" }
+		{ "path": "./tsconfig.node.json" },
+		{ "path": "./tsconfig.server.json" }
 	],
-	"include": ["src/**/*"],
+	"include": ["app-client/**/*"],
 	"exclude": ["node_modules", "dist"]
 }
