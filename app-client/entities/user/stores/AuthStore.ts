@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { UserService } from "../services/UserService";
 import type { IUser } from "../types/user";
 
@@ -13,32 +13,32 @@ class AuthStore {
 	login = async (email: string, password: string) => {
 		const { success, user } = await UserService.login(email, password);
 
-		if (success && user) {
-			this.isAuthenticated = true;
-			this.user = user;
-			return true;
-		}
+		runInAction(() => {
+			if (success && user) {
+				this.isAuthenticated = true;
+				this.user = user;
+			}
+		});
 
-		return false;
+		return success;
 	};
 
 	logout = async () => {
 		await UserService.logout();
 
-		this.isAuthenticated = false;
-		this.user = null;
+		runInAction(() => {
+			this.isAuthenticated = false;
+			this.user = null;
+		});
 	};
 
 	checkAuth = async () => {
 		const { success, user } = await UserService.checkAuth();
 
-		if (success && user) {
-			this.isAuthenticated = true;
-			this.user = user;
-		} else {
-			this.isAuthenticated = false;
-			this.user = null;
-		}
+		runInAction(() => {
+			this.isAuthenticated = success && !!user;
+			this.user = user || null;
+		});
 	};
 }
 

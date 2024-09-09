@@ -8,12 +8,6 @@ const HomePage = observer(() => {
 	const { authStore } = useContext(StoreContext);
 	const navigation = useNavigation();
 
-	useEffect(() => {
-		if (!authStore.isAuthenticated) {
-			navigation.goToLogin();
-		}
-	}, [authStore.isAuthenticated, navigation]);
-
 	const handleLogout = () => {
 		authStore.logout();
 		navigation.goToLogin();
