@@ -1,13 +1,10 @@
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { useNavigation } from "@client/shared/hooks/useNavigation";
 import UButton from "@client/shared/ui/UButton/UButton";
-import { trpc } from "@client/shared/utils/trpc";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 
 const HomePage = observer(() => {
-	const userQuery = trpc.hello.useQuery({});
-
 	const { authStore } = useContext(StoreContext);
 	const navigation = useNavigation();
 
@@ -30,7 +27,6 @@ const HomePage = observer(() => {
 		<div>
 			<h1>Home Page</h1>
 			<p>Welcome, {authStore.user?.email}!</p>
-			<p>{userQuery.data}</p>
 			<UButton onClick={handleLogout}>Выйти</UButton>
 		</div>
 	);

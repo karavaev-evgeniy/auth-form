@@ -3,9 +3,6 @@
 	"organizeImports": {
 		"enabled": true
 	},
-	"files": {
-		"include": ["app-client/**/*.{ts,tsx}", "app-server/**/*.{ts}"]
-	},
 	"linter": {
 		"enabled": true,
 		"rules": {

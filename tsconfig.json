@@ -1,11 +1,12 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@client/*": ["./app-client/*"],
-      "@server/*": ["./app-server/*"]
-    },
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react"
-  }
+	"compilerOptions": {
+		"strict": true,
+		"baseUrl": ".",
+		"paths": {
+			"@client/*": ["./app-client/*"],
+			"@server/*": ["./app-server/*"]
+		},
+		"allowSyntheticDefaultImports": true,
+		"jsx": "react"
+	}
 }
