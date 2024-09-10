@@ -7,7 +7,7 @@ import type {
 import { loginSchema, registrationSchema } from "@shared/types/user";
 import { z } from "zod";
 
-const BASE_URL = "http://localhost:4000/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const UserService = {
 	validateLoginForm: (

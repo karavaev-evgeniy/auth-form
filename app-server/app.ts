@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import { FRONTEND_URL } from "./config";
+import { CLIENT_URL } from "./config";
 import authRoutes from "./routes/authRoutes";
 
 const app = express();
@@ -11,7 +11,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: FRONTEND_URL,
+		origin: CLIENT_URL,
 		credentials: true,
 	}),
 );

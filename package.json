@@ -1,44 +1,45 @@
 {
-	"name": "auth-form",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-		"dev:client": "vite",
-		"dev:server": "tsx app-server/index.ts",
-		"start:server": "tsx app-server/index.ts",
-		"build:client": "tsc -b && vite build",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"classnames": "^2.5.1",
-		"concurrently": "^9.0.0",
-		"cookie-parser": "^1.4.6",
-		"cors": "^2.8.5",
-		"express": "^4.19.2",
-		"jsonwebtoken": "^9.0.2",
-		"mobx": "^6.13.1",
-		"mobx-react-lite": "^4.0.7",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"react-router-dom": "^6.26.1",
-		"typescript": "^5.5.4",
-		"vite-plugin-svgr": "^4.2.0",
-		"zod": "^3.23.8"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.8.3",
-		"@types/cookie-parser": "^1.4.7",
-		"@types/cors": "^2.8.17",
-		"@types/jsonwebtoken": "^9.0.6",
-		"@types/node": "^22.5.4",
-		"@types/react": "^18.3.3",
-		"@types/react-dom": "^18.3.0",
-		"@types/express": "^4.17.21",
-		"@vitejs/plugin-react": "^4.3.1",
-		"globals": "^15.9.0",
-		"sass": "^1.78.0",
-		"vite": "^5.4.1"
-	}
+  "name": "auth-form",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "vite",
+    "dev:server": "tsx app-server/index.ts",
+    "start:server": "tsx app-server/index.ts",
+    "build:client": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "concurrently": "^9.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mobx": "^6.13.1",
+    "mobx-react-lite": "^4.0.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
+    "typescript": "^5.5.4",
+    "vite-plugin-svgr": "^4.2.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.5.4",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "dotenv": "^16.4.5",
+    "globals": "^15.9.0",
+    "sass": "^1.78.0",
+    "vite": "^5.4.1"
+  }
 }
