@@ -8,14 +8,17 @@ const AuthCheck = observer(({ children }) => {
 	const [isChecking, setIsChecking] = useState(true);
 
 	useEffect(() => {
-		const checkAuth = async () => {
-			await authStore.checkAuth();
-
-			setTimeout(() => {
-				setIsChecking(false);
-			}, 1000);
-		};
-		checkAuth();
+		(async () => {
+			try {
+				await authStore.checkAuth();
+			} catch (error) {
+				console.error("Error checking auth:", error);
+			} finally {
+				setTimeout(() => {
+					setIsChecking(false);
+				}, 1000);
+			}
+		})();
 	}, [authStore]);
 
 	if (isChecking) {

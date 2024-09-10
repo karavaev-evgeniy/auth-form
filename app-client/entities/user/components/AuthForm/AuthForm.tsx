@@ -18,6 +18,7 @@ const AuthForm = observer(() => {
 	const navigation = useNavigation();
 
 	const [isRegistration, setIsRegistration] = useState(false);
+
 	const [credentials, setCredentials] = useState<IRegistrationCredentials>({
 		email: "",
 		password: "",
@@ -80,11 +81,11 @@ const AuthForm = observer(() => {
 	return (
 		<form className="auth-form" onSubmit={handleSubmit}>
 			<div className="auth-form__fields">
-				{/* Email field */}
 				<div className="auth-form__row">
 					<ULabel className="auth-form__label" htmlFor="email">
 						Email
 					</ULabel>
+
 					<UInput
 						id="email"
 						name="email"
@@ -94,17 +95,19 @@ const AuthForm = observer(() => {
 						onChange={(e) =>
 							setCredentials({ ...credentials, email: e.target.value })
 						}
+						autoComplete="username"
 					/>
+
 					{errors.email && (
-						<span className="auth-form__error">{errors.email}</span>
+						<div className="auth-form__error">{errors.email}</div>
 					)}
 				</div>
 
-				{/* Password field */}
 				<div className="auth-form__row">
 					<ULabel className="auth-form__label" htmlFor="password">
 						Password
 					</ULabel>
+
 					<UInputPassword
 						id="password"
 						name="password"
@@ -113,18 +116,20 @@ const AuthForm = observer(() => {
 						onChange={(e) =>
 							setCredentials({ ...credentials, password: e.target.value })
 						}
+						autoComplete={isRegistration ? "new-password" : "current-password"}
 					/>
+
 					{errors.password && (
-						<span className="auth-form__error">{errors.password}</span>
+						<div className="auth-form__error">{errors.password}</div>
 					)}
 				</div>
 
-				{/* Confirm Password field (only for registration) */}
 				{isRegistration && (
 					<div className="auth-form__row">
 						<ULabel className="auth-form__label" htmlFor="confirmPassword">
 							Confirm Password
 						</ULabel>
+
 						<UInputPassword
 							id="confirmPassword"
 							name="confirmPassword"
@@ -136,9 +141,11 @@ const AuthForm = observer(() => {
 									confirmPassword: e.target.value,
 								})
 							}
+							autoComplete="new-password"
 						/>
+
 						{errors.confirmPassword && (
-							<span className="auth-form__error">{errors.confirmPassword}</span>
+							<div className="auth-form__error">{errors.confirmPassword}</div>
 						)}
 					</div>
 				)}

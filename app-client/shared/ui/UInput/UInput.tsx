@@ -1,10 +1,8 @@
-import type { InputHTMLAttributes } from "react";
 import "./UInput.scss";
 import classnames from "classnames";
+import type { InputHTMLAttributes } from "react";
 
-interface UInputProps extends InputHTMLAttributes<HTMLInputElement> {
-	// Здесь можно добавить кастомные props, если они нужны
-}
+export interface UInputProps extends InputHTMLAttributes<HTMLInputElement> {}
 
 function UInput({ className, ...props }: UInputProps) {
 	return <input className={classnames("u-input", className)} {...props} />;

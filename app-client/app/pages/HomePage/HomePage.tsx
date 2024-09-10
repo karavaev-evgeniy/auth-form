@@ -1,15 +1,15 @@
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { useNavigation } from "@client/shared/hooks/useNavigation";
-import UButton from "@client/shared/ui/UButton/UButton";
 import { observer } from "mobx-react-lite";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import "./HomePage.scss";
 
 const HomePage = observer(() => {
 	const { authStore } = useContext(StoreContext);
 	const navigation = useNavigation();
 
-	const handleLogout = () => {
-		authStore.logout();
+	const handleLogout = async () => {
+		await authStore.logout();
 		navigation.goToLogin();
 	};
 
@@ -18,10 +18,16 @@ const HomePage = observer(() => {
 	}
 
 	return (
-		<div>
-			<h1>Home Page</h1>
-			<p>Welcome, {authStore.user?.email}!</p>
-			<UButton onClick={handleLogout}>Выйти</UButton>
+		<div className="home-page">
+			<p>{authStore.user?.email}</p>
+
+			<button
+				className="home-page__logout"
+				type="button"
+				onClick={handleLogout}
+			>
+				Выйти
+			</button>
 		</div>
 	);
 });

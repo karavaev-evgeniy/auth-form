@@ -1,0 +1,14 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+  padding: 2rem;
+
+  &__logout {
+    font-family: var(--font-martian);
+    cursor: pointer;
+  }
+}

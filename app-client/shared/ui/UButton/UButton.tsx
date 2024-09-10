@@ -1,10 +1,8 @@
 import classnames from "classnames";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes } from "react";
 import "./UButton.scss";
 
-interface UButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	children?: ReactNode;
-}
+interface UButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 function UButton({ children, className, ...props }: UButtonProps) {
 	return (

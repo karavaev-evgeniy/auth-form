@@ -5,12 +5,10 @@ import "./UInputPassword.scss";
 import EyeSlashIcon from "@client/shared/icons/eye-slash.svg";
 import EyeIcon from "@client/shared/icons/eye.svg";
 
-interface PasswordInputProps
-	extends React.InputHTMLAttributes<HTMLInputElement> {
-	// Дополнительные пропсы, если нужны
-}
+interface UInputPasswordProps
+	extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-function PasswordInput(props: PasswordInputProps) {
+function UInputPassword({ ...props }: UInputPasswordProps) {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const toggleShowPassword = () => {
@@ -20,9 +18,9 @@ function PasswordInput(props: PasswordInputProps) {
 	return (
 		<div className="u-input-password">
 			<UInput
-				{...props}
 				type={showPassword ? "text" : "password"}
 				className="u-input-password__field"
+				{...props}
 			/>
 
 			<button
@@ -41,4 +39,4 @@ function PasswordInput(props: PasswordInputProps) {
 	);
 }
 
-export default PasswordInput;
+export default UInputPassword;

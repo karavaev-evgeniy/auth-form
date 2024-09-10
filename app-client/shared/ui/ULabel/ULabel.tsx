@@ -1,11 +1,10 @@
+import classnames from "classnames";
 import type { LabelHTMLAttributes } from "react";
 
-interface ULabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
-	// Здесь можно добавить кастомные props, если они нужны
-}
+interface ULabelProps extends LabelHTMLAttributes<HTMLLabelElement> {}
 
-function ULabel(props: ULabelProps) {
-	return <label className="u-label" {...props} />;
+function ULabel({ className, ...props }: ULabelProps) {
+	return <label className={classnames("u-label", className)} {...props} />;
 }
 
 export default ULabel;
