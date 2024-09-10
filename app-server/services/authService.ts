@@ -1,6 +1,7 @@
+import type { IServerUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
-import { type User, users } from "../models/User";
+import { users } from "../models/User";
 
 interface AuthResult {
 	success: boolean;
@@ -54,7 +55,7 @@ export const registerUser = (email: string, password: string): AuthResult => {
 		};
 	}
 
-	const newUser: User = {
+	const newUser: IServerUser = {
 		id: users.length + 1,
 		email,
 		password,

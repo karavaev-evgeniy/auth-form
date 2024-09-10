@@ -11,7 +11,7 @@ import { UserService } from "@client/entities/user/services/UserService";
 import type {
 	ILoginErrors,
 	IRegistrationCredentials,
-} from "@client/entities/user/types/user";
+} from "@shared/types/user";
 
 const AuthForm = observer(() => {
 	const { authStore } = useContext(StoreContext);

@@ -1,10 +1,10 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import { UserService } from "../services/UserService";
 import type {
 	ILoginCredentials,
 	IRegistrationCredentials,
 	IUser,
-} from "../types/user";
+} from "@shared/types/user";
+import { makeAutoObservable, runInAction } from "mobx";
+import { UserService } from "../services/UserService";
 
 class AuthStore {
 	isAuthenticated = false;

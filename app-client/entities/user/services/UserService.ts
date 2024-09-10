@@ -1,11 +1,11 @@
-import { z } from "zod";
 import type {
 	ILoginCredentials,
 	ILoginErrors,
 	IRegistrationCredentials,
 	IUser,
-} from "../types/user";
-import { loginSchema, registrationSchema } from "../types/user";
+} from "@shared/types/user";
+import { loginSchema, registrationSchema } from "@shared/types/user";
+import { z } from "zod";
 
 const BASE_URL = "http://localhost:4000/api";
 

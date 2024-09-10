@@ -1,13 +1,11 @@
+import type { IUser } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
 
 declare global {
 	namespace Express {
 		interface Request {
-			user?: {
-				id: number;
-				email: string;
-			};
+			user?: IUser;
 		}
 	}
 }

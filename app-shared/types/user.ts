@@ -4,6 +4,11 @@ export interface IUser {
 	email: string;
 }
 
+export interface IServerUser extends IUser {
+	id: number;
+	password: string;
+}
+
 export interface ILoginCredentials {
 	email: string;
 	password: string;

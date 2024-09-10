@@ -4,7 +4,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@client/*": ["./app-client/*"],
-			"@server/*": ["./app-server/*"]
+			"@server/*": ["./app-server/*"],
+			"@shared/*": ["./app-shared/*"]
 		},
 		"allowSyntheticDefaultImports": true,
 		"jsx": "react"

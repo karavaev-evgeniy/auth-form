@@ -1,8 +1,12 @@
+import type {
+	ILoginCredentials,
+	IRegistrationCredentials,
+} from "@shared/types/user";
 import type { Request, Response } from "express";
 import * as authService from "../services/authService";
 
 export const login = (req: Request, res: Response) => {
-	const { email, password } = req.body;
+	const { email, password } = req.body as ILoginCredentials;
 	const result = authService.authenticateUser(email, password);
 
 	if (result.success) {
@@ -14,7 +18,7 @@ export const login = (req: Request, res: Response) => {
 };
 
 export const register = (req: Request, res: Response) => {
-	const { email, password } = req.body;
+	const { email, password } = req.body as IRegistrationCredentials;
 	const result = authService.registerUser(email, password);
 
 	if (result.success) {
