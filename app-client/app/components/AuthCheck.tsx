@@ -1,6 +1,7 @@
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
+import "./AuthCheck.scss";
 
 const AuthCheck = observer(({ children }) => {
 	const { authStore } = useContext(StoreContext);
@@ -9,13 +10,20 @@ const AuthCheck = observer(({ children }) => {
 	useEffect(() => {
 		const checkAuth = async () => {
 			await authStore.checkAuth();
-			setIsChecking(false);
+
+			setTimeout(() => {
+				setIsChecking(false);
+			}, 1000);
 		};
 		checkAuth();
 	}, [authStore]);
 
 	if (isChecking) {
-		return <div>Loading...</div>;
+		return (
+			<main className="auth-check">
+				<h1 className="auth-check__text">Checking authorization...</h1>
+			</main>
+		);
 	}
 
 	return children;

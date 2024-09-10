@@ -1,0 +1,23 @@
+@keyframes animation-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.auth-check {
+  display: flex;
+
+  min-width: 100vw;
+  min-height: 100vh;
+
+  padding: 0 2rem;
+
+  justify-content: center;
+  align-items: center;
+
+  &__text {
+    font-size: 22px;
+    line-height: 28px;
+
+    animation: animation-blink 1s infinite;
+  }
+}
