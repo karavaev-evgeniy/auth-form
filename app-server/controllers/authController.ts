@@ -9,7 +9,19 @@ export const login = (req: Request, res: Response) => {
 		res.cookie("token", result.token, { httpOnly: true, sameSite: "strict" });
 		res.json({ success: true, user: result.user });
 	} else {
-		res.status(401).json({ success: false, message: "Invalid credentials" });
+		res.status(401).json({ success: false, message: result.message });
+	}
+};
+
+export const register = (req: Request, res: Response) => {
+	const { email, password } = req.body;
+	const result = authService.registerUser(email, password);
+
+	if (result.success) {
+		res.cookie("token", result.token, { httpOnly: true, sameSite: "strict" });
+		res.json({ success: true, user: result.user });
+	} else {
+		res.status(400).json({ success: false, message: result.message });
 	}
 };
 

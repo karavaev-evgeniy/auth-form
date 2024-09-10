@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
-import { User, users } from "../models/User";
+import { type User, users } from "../models/User";
 
 interface AuthResult {
 	success: boolean;
@@ -17,22 +17,59 @@ export const authenticateUser = (
 	email: string,
 	password: string,
 ): AuthResult => {
-	const user = users.find((u) => u.email === email && u.password === password);
+	const user = users.find((u) => u.email === email);
 
-	if (user) {
-		const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-			expiresIn: "1h",
-		});
-
+	if (!user) {
 		return {
-			success: true,
-			user: { id: user.id, email: user.email },
-			token,
+			success: false,
+			message: "User not found",
 		};
 	}
 
+	if (user.password !== password) {
+		return {
+			success: false,
+			message: "Invalid password",
+		};
+	}
+
+	const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+		expiresIn: "1h",
+	});
+
 	return {
-		success: false,
+		success: true,
+		user: { id: user.id, email: user.email },
+		token,
+	};
+};
+
+export const registerUser = (email: string, password: string): AuthResult => {
+	const existingUser = users.find((u) => u.email === email);
+
+	if (existingUser) {
+		return {
+			success: false,
+			message: "User already exists",
+		};
+	}
+
+	const newUser: User = {
+		id: users.length + 1,
+		email,
+		password,
+	};
+
+	users.push(newUser);
+
+	const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET, {
+		expiresIn: "1h",
+	});
+
+	return {
+		success: true,
+		user: { id: newUser.id, email: newUser.email },
+		token,
 	};
 };
 

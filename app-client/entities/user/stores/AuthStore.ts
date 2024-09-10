@@ -1,6 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { UserService } from "../services/UserService";
-import type { ILoginCredentials, IUser } from "../types/user";
+import type {
+	ILoginCredentials,
+	IRegistrationCredentials,
+	IUser,
+} from "../types/user";
 
 class AuthStore {
 	isAuthenticated = false;
@@ -11,7 +15,20 @@ class AuthStore {
 	}
 
 	login = async (credentials: ILoginCredentials) => {
-		const { success, user } = await UserService.login(credentials);
+		const result = await UserService.login(credentials);
+
+		runInAction(() => {
+			if (result.success && result.user) {
+				this.isAuthenticated = true;
+				this.user = result.user;
+			}
+		});
+
+		return result;
+	};
+
+	register = async (credentials: IRegistrationCredentials) => {
+		const { success, user } = await UserService.register(credentials);
 
 		runInAction(() => {
 			if (success && user) {
