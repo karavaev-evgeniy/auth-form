@@ -8,6 +8,11 @@ import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import { z } from "zod";
 import "./AuthForm.scss";
+import { UserService } from "@client/entities/user/services/UserService";
+import type {
+	ILoginCredentials,
+	ILoginErrors,
+} from "@client/entities/user/types/user";
 
 const schema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -18,38 +23,36 @@ const AuthForm = observer(() => {
 	const { authStore } = useContext(StoreContext);
 	const navigation = useNavigation();
 
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [credentials, setCredentials] = useState<ILoginCredentials>({
+		email: "",
+		password: "",
+	});
 
-	const [errors, setErrors] = useState({
+	const [errors, setErrors] = useState<ILoginErrors>({
 		email: "",
 		password: "",
 		general: "",
 	});
 
 	const validateForm = () => {
-		try {
-			schema.parse({ email, password });
-			setErrors({ email: "", password: "", general: "" });
-			return true;
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				const newErrors = { email: "", password: "", general: "" };
-				for (const err of error.errors) {
-					if (err.path[0] === "email") newErrors.email = err.message;
-					if (err.path[0] === "password") newErrors.password = err.message;
-				}
-				setErrors(newErrors);
-			}
-			return false;
-		}
+		const { isValid, errors: validationErrors } =
+			UserService.validateLoginForm(credentials);
+
+		setErrors((prevErrors) => ({
+			...prevErrors,
+			email: validationErrors.email || "",
+			password: validationErrors.password || "",
+			general: validationErrors.general || "",
+		}));
+
+		return isValid;
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		if (validateForm()) {
-			const success = await authStore.login(email, password);
+			const success = await authStore.login(credentials);
 			if (success) {
 				navigation.goToHome();
 			} else {
@@ -72,8 +75,10 @@ const AuthForm = observer(() => {
 							name="email"
 							type="email"
 							placeholder="@"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							value={credentials.email}
+							onChange={(e) =>
+								setCredentials({ ...credentials, email: e.target.value })
+							}
 						/>
 
 						{errors.email && (
@@ -90,8 +95,10 @@ const AuthForm = observer(() => {
 							id="password"
 							name="password"
 							placeholder="*"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
+							value={credentials.password}
+							onChange={(e) =>
+								setCredentials({ ...credentials, password: e.target.value })
+							}
 						/>
 
 						{errors.password && (

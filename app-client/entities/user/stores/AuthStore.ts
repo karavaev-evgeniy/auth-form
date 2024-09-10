@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { UserService } from "../services/UserService";
-import type { IUser } from "../types/user";
+import type { ILoginCredentials, IUser } from "../types/user";
 
 class AuthStore {
 	isAuthenticated = false;
@@ -10,8 +10,8 @@ class AuthStore {
 		makeAutoObservable(this);
 	}
 
-	login = async (email: string, password: string) => {
-		const { success, user } = await UserService.login(email, password);
+	login = async (credentials: ILoginCredentials) => {
+		const { success, user } = await UserService.login(credentials);
 
 		runInAction(() => {
 			if (success && user) {
