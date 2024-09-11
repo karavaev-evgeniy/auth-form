@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { users } from "../models/User";
 
-export const authenticateUser = (
+export const authenticateUser = async (
 	email: string,
 	password: string,
-): AuthResult => {
+): Promise<AuthResult> => {
 	const user = users.find((u) => u.email === email);
 
 	if (!user) {
@@ -34,7 +34,10 @@ export const authenticateUser = (
 	};
 };
 
-export const registerUser = (email: string, password: string): AuthResult => {
+export const registerUser = async (
+	email: string,
+	password: string,
+): Promise<AuthResult> => {
 	const existingUser = users.find((u) => u.email === email);
 
 	if (existingUser) {
@@ -63,7 +66,7 @@ export const registerUser = (email: string, password: string): AuthResult => {
 	};
 };
 
-export const getUserFromToken = (token: string): AuthResult => {
+export const getUserFromToken = async (token: string): Promise<AuthResult> => {
 	if (!token) {
 		return {
 			success: false,
@@ -101,7 +104,7 @@ export const getUserFromToken = (token: string): AuthResult => {
 	}
 };
 
-export const verifyToken = (token: string): AuthResult => {
+export const verifyToken = async (token: string): Promise<AuthResult> => {
 	try {
 		const decoded = jwt.verify(token, JWT_SECRET) as {
 			id: number;

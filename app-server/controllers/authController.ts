@@ -19,36 +19,52 @@ const handleAuthentication = (result: AuthResult, res: Response) => {
 	}
 };
 
-export const login = (req: Request, res: Response) => {
-	const { email, password } = req.body as ILoginCredentials;
-	const result = authService.authenticateUser(email, password);
-
-	handleAuthentication(result, res);
+export const login = async (req: Request, res: Response) => {
+	try {
+		const { email, password } = req.body as ILoginCredentials;
+		const result = await authService.authenticateUser(email, password);
+		handleAuthentication(result, res);
+	} catch (error) {
+		console.error("Login error:", error);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
 };
 
-export const register = (req: Request, res: Response) => {
-	const { email, password } = req.body as IRegistrationCredentials;
-	const result = authService.registerUser(email, password);
-
-	handleAuthentication(result, res);
+export const register = async (req: Request, res: Response) => {
+	try {
+		const { email, password } = req.body as IRegistrationCredentials;
+		const result = await authService.registerUser(email, password);
+		handleAuthentication(result, res);
+	} catch (error) {
+		console.error("Registration error:", error);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
 };
 
-export const getUser = (req: Request, res: Response) => {
-	const token = req.cookies.token;
-	const result = authService.getUserFromToken(token);
+export const getUser = async (req: Request, res: Response) => {
+	try {
+		const token = req.cookies.token;
+		const result = await authService.getUserFromToken(token);
 
-	if (result.success) {
-		res.json({ success: true, user: result.user });
-	} else {
-		if (result.status != null) {
+		if (result.success) {
+			res.json({ success: true, user: result.user });
+		} else {
 			res
-				.status(result.status)
+				.status(result.status || 400)
 				.json({ success: false, message: result.message });
 		}
+	} catch (error) {
+		console.error("Get user error:", error);
+		res.status(500).json({ success: false, message: "Internal server error" });
 	}
 };
 
 export const logout = (req: Request, res: Response) => {
-	clearTokenCookie(res);
-	res.json({ success: true });
+	try {
+		clearTokenCookie(res);
+		res.json({ success: true });
+	} catch (error) {
+		console.error("Logout error:", error);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
 };

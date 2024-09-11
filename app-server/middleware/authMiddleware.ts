@@ -10,7 +10,7 @@ declare global {
 	}
 }
 
-export const authenticateToken = (
+export const authenticateToken = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -23,13 +23,17 @@ export const authenticateToken = (
 			.json({ success: false, message: "Not authenticated" });
 	}
 
-	const result = authService.verifyToken(token);
+	try {
+		const result = await authService.verifyToken(token);
 
-	if (!result.success || !result.user) {
-		return res.status(401).json({ success: false, message: "Invalid token" });
+		if (!result.success || !result.user) {
+			return res.status(401).json({ success: false, message: "Invalid token" });
+		}
+
+		req.user = result.user;
+		next();
+	} catch (error) {
+		console.error("Token verification error:", error);
+		res.status(500).json({ success: false, message: "Internal server error" });
 	}
-
-	req.user = result.user;
-
-	next();
 };
