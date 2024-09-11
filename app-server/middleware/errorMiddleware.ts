@@ -1,4 +1,5 @@
 import { HTTP_STATUS, type HttpStatus } from "@server/constants/httpStatus";
+import type { ApiResponse } from "@shared/types/api";
 import type { NextFunction, Request, Response } from "express";
 
 export interface AppError {
@@ -21,7 +22,7 @@ export function createAppError(
 export const errorHandler = (
 	err: AppError | Error,
 	req: Request,
-	res: Response,
+	res: Response<ApiResponse>,
 	next: NextFunction,
 ) => {
 	if ("statusCode" in err && "isOperational" in err) {

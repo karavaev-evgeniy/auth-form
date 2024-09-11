@@ -18,9 +18,9 @@ class AuthStore {
 		const result = await UserService.login(credentials);
 
 		runInAction(() => {
-			if (result.success && result.user) {
+			if (result.success && result.data) {
 				this.isAuthenticated = true;
-				this.user = result.user;
+				this.user = result.data;
 			}
 		});
 
@@ -28,16 +28,16 @@ class AuthStore {
 	};
 
 	register = async (credentials: IRegistrationCredentials) => {
-		const { success, user } = await UserService.register(credentials);
+		const result = await UserService.register(credentials);
 
 		runInAction(() => {
-			if (success && user) {
+			if (result.success && result.data) {
 				this.isAuthenticated = true;
-				this.user = user;
+				this.user = result.data;
 			}
 		});
 
-		return success;
+		return result.success;
 	};
 
 	logout = async () => {
@@ -50,11 +50,11 @@ class AuthStore {
 	};
 
 	checkAuth = async () => {
-		const { success, user } = await UserService.checkAuth();
+		const result = await UserService.checkAuth();
 
 		runInAction(() => {
-			this.isAuthenticated = success && !!user;
-			this.user = user || null;
+			this.isAuthenticated = result.success && !!result.data;
+			this.user = result.data || null;
 		});
 	};
 }

@@ -1,6 +1,7 @@
 import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
-import type { AuthResult, IServerUser, IUser } from "@shared/types/user";
+import type { AuthResponse } from "@shared/types/api";
+import type { IServerUser, IUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { users } from "../models/User";
@@ -36,24 +37,24 @@ const getUserById = (id: number): IServerUser => {
 	return user;
 };
 
-const createAuthResult = (user: IUser, token?: string): AuthResult => ({
+const createAuthResult = (user: IUser, token?: string): AuthResponse => ({
 	success: true,
-	user: { id: user.id, email: user.email },
+	data: { id: user.id, email: user.email },
 	token,
 });
 
 export const authenticateUser = async (
 	email: string,
 	password: string,
-): Promise<AuthResult> => {
+): Promise<AuthResponse> => {
 	const user = findUser(email);
 
 	if (!user) {
-		throw createAppError("User not found", 400);
+		throw createAppError("User not found", HTTP_STATUS.BAD_REQUEST);
 	}
 
 	if (user.password !== password) {
-		throw createAppError("Invalid password", 400);
+		throw createAppError("Invalid password", HTTP_STATUS.BAD_REQUEST);
 	}
 
 	const token = createToken(user);
@@ -64,9 +65,9 @@ export const authenticateUser = async (
 export const registerUser = async (
 	email: string,
 	password: string,
-): Promise<AuthResult> => {
+): Promise<AuthResponse> => {
 	if (findUser(email)) {
-		throw createAppError("User already exists", 400);
+		throw createAppError("User already exists", HTTP_STATUS.BAD_REQUEST);
 	}
 	const newUser: IServerUser = {
 		id: users.length + 1,
@@ -81,9 +82,11 @@ export const registerUser = async (
 	return createAuthResult(newUser, token);
 };
 
-export const getUserFromToken = async (token: string): Promise<AuthResult> => {
+export const getUserFromToken = async (
+	token: string,
+): Promise<AuthResponse> => {
 	if (!token) {
-		throw createAppError("Not authenticated", 401);
+		throw createAppError("Not authenticated", HTTP_STATUS.UNAUTHORIZED);
 	}
 
 	const decoded = verifyAndDecodeToken(token);
@@ -92,7 +95,7 @@ export const getUserFromToken = async (token: string): Promise<AuthResult> => {
 	return createAuthResult(user);
 };
 
-export const verifyToken = async (token: string): Promise<AuthResult> => {
+export const verifyToken = async (token: string): Promise<AuthResponse> => {
 	const decoded = verifyAndDecodeToken(token);
 	const user = getUserById(decoded.id);
 

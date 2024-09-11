@@ -1,7 +1,11 @@
 import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
 import type {
-	AuthResult,
+	ApiResponse,
+	AuthResponse,
+	UserResponse,
+} from "@shared/types/api";
+import type {
 	ILoginCredentials,
 	IRegistrationCredentials,
 } from "@shared/types/user";
@@ -9,21 +13,21 @@ import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
 import * as cookieService from "../services/cookieService";
 
-const handleAuthentication = (result: AuthResult, res: Response) => {
-	if (result.success && result.token) {
+const handleAuthentication = (result: AuthResponse, res: Response) => {
+	if (result.success && result.data && result.token) {
 		cookieService.setAuthCookie(res, result.token);
-		res.json({ success: true, user: result.user });
+		res.json(result);
 	} else {
 		throw createAppError(
 			result.message || "Authentication failed",
-			result.status || HTTP_STATUS.BAD_REQUEST,
+			result.success ? HTTP_STATUS.OK : HTTP_STATUS.BAD_REQUEST,
 		);
 	}
 };
 
 export const login = async (
 	req: Request,
-	res: Response,
+	res: Response<AuthResponse>,
 	next: NextFunction,
 ) => {
 	try {
@@ -37,7 +41,7 @@ export const login = async (
 
 export const register = async (
 	req: Request,
-	res: Response,
+	res: Response<AuthResponse>,
 	next: NextFunction,
 ) => {
 	try {
@@ -51,7 +55,7 @@ export const register = async (
 
 export const getUser = async (
 	req: Request,
-	res: Response,
+	res: Response<ApiResponse<UserResponse>>,
 	next: NextFunction,
 ) => {
 	try {
@@ -63,12 +67,12 @@ export const getUser = async (
 
 		const result = await authService.getUserFromToken(token);
 
-		if (result.success) {
-			res.json({ success: true, user: result.user });
+		if (result.success && result.data) {
+			res.json(result);
 		} else {
 			throw createAppError(
 				result.message || "Failed to get user",
-				result.status || HTTP_STATUS.BAD_REQUEST,
+				HTTP_STATUS.BAD_REQUEST,
 			);
 		}
 	} catch (error) {
@@ -76,7 +80,11 @@ export const getUser = async (
 	}
 };
 
-export const logout = (req: Request, res: Response, next: NextFunction) => {
+export const logout = (
+	req: Request,
+	res: Response<ApiResponse>,
+	next: NextFunction,
+) => {
 	try {
 		cookieService.clearAuthCookie(res);
 		res.json({ success: true });

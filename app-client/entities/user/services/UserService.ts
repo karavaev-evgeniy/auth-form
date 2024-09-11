@@ -1,4 +1,9 @@
 import type {
+	ApiResponse,
+	AuthResponse,
+	UserResponse,
+} from "@shared/types/api";
+import type {
 	ILoginCredentials,
 	ILoginErrors,
 	IRegistrationCredentials,
@@ -64,9 +69,7 @@ export const UserService = {
 		}
 	},
 
-	async login(
-		credentials: ILoginCredentials,
-	): Promise<{ success: boolean; user?: IUser; message?: string }> {
+	async login(credentials: ILoginCredentials): Promise<AuthResponse> {
 		try {
 			const response = await fetch(`${BASE_URL}/login`, {
 				method: "POST",
@@ -90,9 +93,7 @@ export const UserService = {
 		}
 	},
 
-	async register(
-		credentials: IRegistrationCredentials,
-	): Promise<{ success: boolean; user?: IUser }> {
+	async register(credentials: IRegistrationCredentials): Promise<AuthResponse> {
 		try {
 			const response = await fetch(`${BASE_URL}/register`, {
 				method: "POST",
@@ -121,7 +122,7 @@ export const UserService = {
 		}
 	},
 
-	async checkAuth(): Promise<{ success: boolean; user?: IUser }> {
+	async checkAuth(): Promise<ApiResponse<UserResponse>> {
 		try {
 			const response = await fetch(`${BASE_URL}/user`, {
 				credentials: "include",

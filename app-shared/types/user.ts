@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export interface IUser {
-	id?: number;
+	id: number;
 	email: string;
 }
 
@@ -24,14 +24,6 @@ export interface ILoginErrors {
 	password?: string;
 	confirmPassword?: string;
 	general?: string;
-}
-
-export interface AuthResult {
-	success: boolean;
-	user?: IUser;
-	token?: string;
-	status?: number;
-	message?: string;
 }
 
 export const loginSchema = z.object({
