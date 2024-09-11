@@ -1,5 +1,4 @@
 import { createAppError } from "@server/middleware/errorMiddleware";
-import { clearTokenCookie, setTokenCookie } from "@server/utils/cookie";
 import type {
 	AuthResult,
 	ILoginCredentials,
@@ -7,10 +6,11 @@ import type {
 } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
+import * as cookieService from "../services/cookieService";
 
 const handleAuthentication = (result: AuthResult, res: Response) => {
 	if (result.success && result.token) {
-		setTokenCookie(res, result.token);
+		cookieService.setAuthCookie(res, result.token);
 		res.json({ success: true, user: result.user });
 	} else {
 		throw createAppError(
@@ -54,7 +54,12 @@ export const getUser = async (
 	next: NextFunction,
 ) => {
 	try {
-		const token = req.cookies.token;
+		const token = cookieService.getAuthCookie(req);
+
+		if (!token) {
+			throw createAppError("Not authenticated", 401);
+		}
+
 		const result = await authService.getUserFromToken(token);
 
 		if (result.success) {
@@ -72,7 +77,7 @@ export const getUser = async (
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {
 	try {
-		clearTokenCookie(res);
+		cookieService.clearAuthCookie(res);
 		res.json({ success: true });
 	} catch (error) {
 		next(error);

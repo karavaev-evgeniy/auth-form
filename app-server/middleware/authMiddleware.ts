@@ -2,6 +2,7 @@ import { createAppError } from "@server/middleware/errorMiddleware";
 import type { IUser } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
+import * as cookieService from "../services/cookieService";
 
 declare global {
 	namespace Express {
@@ -16,7 +17,7 @@ export const authenticateToken = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	const token = req.cookies.token;
+	const token = cookieService.getAuthCookie(req);
 
 	if (!token) {
 		return next(createAppError("Not authenticated", 401));
