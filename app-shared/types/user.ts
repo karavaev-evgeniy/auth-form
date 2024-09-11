@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export interface IUser {
+	id?: number;
 	email: string;
 }
 

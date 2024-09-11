@@ -1,52 +1,72 @@
-import type { AuthResult, IServerUser } from "@shared/types/user";
+import { createAppError } from "@server/middleware/errorMiddleware";
+import type { AuthResult, IServerUser, IUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { users } from "../models/User";
+
+const findUser = (email: string): IServerUser | undefined => {
+	return users.find((u) => u.email === email);
+};
+
+const createToken = (user: IUser): string => {
+	return jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+		expiresIn: "1h",
+	});
+};
+
+const verifyAndDecodeToken = (token: string): { id: number; email: string } => {
+	try {
+		return jwt.verify(token, JWT_SECRET) as { id: number; email: string };
+	} catch (error) {
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw createAppError("Invalid token", 401);
+		}
+
+		throw error;
+	}
+};
+
+const getUserById = (id: number): IServerUser => {
+	const user = users.find((u) => u.id === id);
+
+	if (!user) {
+		throw createAppError("User not found", 404);
+	}
+	return user;
+};
+
+const createAuthResult = (user: IUser, token?: string): AuthResult => ({
+	success: true,
+	user: { id: user.id, email: user.email },
+	token,
+});
 
 export const authenticateUser = async (
 	email: string,
 	password: string,
 ): Promise<AuthResult> => {
-	const user = users.find((u) => u.email === email);
+	const user = findUser(email);
 
 	if (!user) {
-		return {
-			success: false,
-			message: "User not found",
-		};
+		throw createAppError("User not found", 400);
 	}
 
 	if (user.password !== password) {
-		return {
-			success: false,
-			message: "Invalid password",
-		};
+		throw createAppError("Invalid password", 400);
 	}
 
-	const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-		expiresIn: "1h",
-	});
+	const token = createToken(user);
 
-	return {
-		success: true,
-		user: { id: user.id, email: user.email },
-		token,
-	};
+	return createAuthResult(user, token);
 };
 
 export const registerUser = async (
 	email: string,
 	password: string,
 ): Promise<AuthResult> => {
-	const existingUser = users.find((u) => u.email === email);
-
-	if (existingUser) {
-		return {
-			success: false,
-			message: "User already exists",
-		};
+	if (findUser(email)) {
+		throw createAppError("User already exists", 400);
 	}
-
 	const newUser: IServerUser = {
 		id: users.length + 1,
 		email,
@@ -55,75 +75,25 @@ export const registerUser = async (
 
 	users.push(newUser);
 
-	const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET, {
-		expiresIn: "1h",
-	});
+	const token = createToken(newUser);
 
-	return {
-		success: true,
-		user: { id: newUser.id, email: newUser.email },
-		token,
-	};
+	return createAuthResult(newUser, token);
 };
 
 export const getUserFromToken = async (token: string): Promise<AuthResult> => {
 	if (!token) {
-		return {
-			success: false,
-			status: 401,
-			message: "Not authenticated",
-		};
+		throw createAppError("Not authenticated", 401);
 	}
 
-	try {
-		const decoded = jwt.verify(token, JWT_SECRET) as {
-			id: number;
-			email: string;
-		};
+	const decoded = verifyAndDecodeToken(token);
+	const user = getUserById(decoded.id);
 
-		const user = users.find((u) => u.id === decoded.id);
-
-		if (user) {
-			return {
-				success: true,
-				user: { id: user.id, email: user.email },
-			};
-		}
-
-		return {
-			success: false,
-			status: 404,
-			message: "User not found",
-		};
-	} catch (error) {
-		return {
-			success: false,
-			status: 401,
-			message: "Invalid token",
-		};
-	}
+	return createAuthResult(user);
 };
 
 export const verifyToken = async (token: string): Promise<AuthResult> => {
-	try {
-		const decoded = jwt.verify(token, JWT_SECRET) as {
-			id: number;
-			email: string;
-		};
+	const decoded = verifyAndDecodeToken(token);
+	const user = getUserById(decoded.id);
 
-		const user = users.find((u) => u.id === decoded.id);
-
-		if (user) {
-			return {
-				success: true,
-				user: { id: user.id, email: user.email },
-			};
-		}
-	} catch (error) {
-		// Do nothing
-	}
-
-	return {
-		success: false,
-	};
+	return createAuthResult(user);
 };

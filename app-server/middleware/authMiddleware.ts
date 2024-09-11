@@ -1,3 +1,4 @@
+import { createAppError } from "@server/middleware/errorMiddleware";
 import type { IUser } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
@@ -18,22 +19,19 @@ export const authenticateToken = async (
 	const token = req.cookies.token;
 
 	if (!token) {
-		return res
-			.status(401)
-			.json({ success: false, message: "Not authenticated" });
+		return next(createAppError("Not authenticated", 401));
 	}
 
 	try {
 		const result = await authService.verifyToken(token);
 
 		if (!result.success || !result.user) {
-			return res.status(401).json({ success: false, message: "Invalid token" });
+			return next(createAppError("Invalid token", 401));
 		}
 
 		req.user = result.user;
 		next();
 	} catch (error) {
-		console.error("Token verification error:", error);
-		res.status(500).json({ success: false, message: "Internal server error" });
+		next(error);
 	}
 };
