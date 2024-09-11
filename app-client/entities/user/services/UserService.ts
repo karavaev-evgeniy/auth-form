@@ -1,6 +1,6 @@
+import { authApi } from "@client/shared/api";
 import type {
 	ApiErrorResponse,
-	ApiResponse,
 	AuthResponse,
 	UserCheckResponse,
 } from "@shared/types/api";
@@ -10,9 +10,8 @@ import type {
 	IRegistrationCredentials,
 } from "@shared/types/user";
 import { loginSchema, registrationSchema } from "@shared/types/user";
+import axios from "axios";
 import { z } from "zod";
-
-const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const UserService = {
 	validateLoginForm: (
@@ -71,48 +70,24 @@ export const UserService = {
 
 	async login(credentials: ILoginCredentials): Promise<AuthResponse> {
 		try {
-			const response = await fetch(`${BASE_URL}/login`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(credentials),
-				credentials: "include",
-			});
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				return data as ApiErrorResponse;
-			}
-
-			return data as AuthResponse;
+			const { data } = await authApi.login(credentials);
+			return data;
 		} catch (error) {
-			console.error("Login error:", error);
+			if (axios.isAxiosError(error) && error.response) {
+				return error.response.data as ApiErrorResponse;
+			}
 			return { success: false, message: "An error occurred during login" };
 		}
 	},
 
 	async register(credentials: IRegistrationCredentials): Promise<AuthResponse> {
 		try {
-			const response = await fetch(`${BASE_URL}/register`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(credentials),
-				credentials: "include",
-			});
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				return data as ApiErrorResponse;
-			}
-
-			return data as AuthResponse;
+			const { data } = await authApi.register(credentials);
+			return data;
 		} catch (error) {
-			console.error("Registration error:", error);
+			if (axios.isAxiosError(error) && error.response) {
+				return error.response.data as ApiErrorResponse;
+			}
 			return {
 				success: false,
 				message: "An error occurred during registration",
@@ -120,48 +95,26 @@ export const UserService = {
 		}
 	},
 
-	async logout(): Promise<ApiResponse<void>> {
+	async logout(): Promise<{ success: boolean; message?: string }> {
 		try {
-			const response = await fetch(`${BASE_URL}/logout`, {
-				method: "POST",
-				credentials: "include",
-			});
-
-			if (!response.ok) {
-				return { success: false, message: "Logout failed" };
-			}
-
-			return { success: true, data: undefined };
+			await authApi.logout();
+			return { success: true };
 		} catch (error) {
 			console.error("Logout error:", error);
-
 			return { success: false, message: "An error occurred during logout" };
 		}
 	},
 
 	async checkAuth(): Promise<UserCheckResponse> {
 		try {
-			const response = await fetch(`${BASE_URL}/user`, {
-				credentials: "include",
-			});
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				return {
-					success: false,
-					message: data.message || "Failed to check authentication",
-				} as ApiErrorResponse;
-			}
-
-			return data as UserCheckResponse;
+			const { data } = await authApi.checkAuth();
+			return data;
 		} catch (error) {
 			console.error("Check auth error:", error);
-
 			return {
 				success: false,
 				message: "An error occurred while checking authentication",
-			} as ApiErrorResponse;
+			};
 		}
 	},
 };
