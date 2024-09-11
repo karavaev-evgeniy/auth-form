@@ -1,39 +1,36 @@
 import { clearTokenCookie, setTokenCookie } from "@server/utils/cookie";
 import type {
+	AuthResult,
 	ILoginCredentials,
 	IRegistrationCredentials,
 } from "@shared/types/user";
 import type { Request, Response } from "express";
 import * as authService from "../services/authService";
 
-export const login = (req: Request, res: Response) => {
-	const { email, password } = req.body as ILoginCredentials;
-	const result = authService.authenticateUser(email, password);
-
+const handleAuthentication = (result: AuthResult, res: Response) => {
 	if (result.success && result.token) {
 		setTokenCookie(res, result.token);
 		res.json({ success: true, user: result.user });
 	} else {
-		res.status(401).json({
+		res.status(result.status || 400).json({
 			success: false,
 			message: result.message || "Authentication failed",
 		});
 	}
 };
 
+export const login = (req: Request, res: Response) => {
+	const { email, password } = req.body as ILoginCredentials;
+	const result = authService.authenticateUser(email, password);
+
+	handleAuthentication(result, res);
+};
+
 export const register = (req: Request, res: Response) => {
 	const { email, password } = req.body as IRegistrationCredentials;
 	const result = authService.registerUser(email, password);
 
-	if (result.success && result.token) {
-		setTokenCookie(res, result.token);
-		res.json({ success: true, user: result.user });
-	} else {
-		res.status(400).json({
-			success: false,
-			message: result.message || "Registration failed",
-		});
-	}
+	handleAuthentication(result, res);
 };
 
 export const getUser = (req: Request, res: Response) => {

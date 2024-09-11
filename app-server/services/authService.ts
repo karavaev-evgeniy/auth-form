@@ -1,18 +1,7 @@
-import type { IServerUser } from "@shared/types/user";
+import type { AuthResult, IServerUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { users } from "../models/User";
-
-interface AuthResult {
-	success: boolean;
-	user?: {
-		id: number;
-		email: string;
-	};
-	token?: string;
-	status?: number;
-	message?: string;
-}
 
 export const authenticateUser = (
 	email: string,
