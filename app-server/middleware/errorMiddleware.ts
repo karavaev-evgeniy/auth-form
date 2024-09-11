@@ -1,12 +1,16 @@
+import { HTTP_STATUS, type HttpStatus } from "@server/constants/httpStatus";
 import type { NextFunction, Request, Response } from "express";
 
 export interface AppError {
 	message: string;
-	statusCode: number;
+	statusCode: HttpStatus;
 	isOperational: boolean;
 }
 
-export function createAppError(message: string, statusCode: number): AppError {
+export function createAppError(
+	message: string,
+	statusCode: HttpStatus,
+): AppError {
 	return {
 		message,
 		statusCode,
@@ -29,7 +33,7 @@ export const errorHandler = (
 
 	console.error("Unexpected error:", err);
 
-	res.status(500).json({
+	res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
 		success: false,
 		message: "An unexpected error occurred",
 	});

@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
 import { loginSchema, registrationSchema } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
@@ -13,7 +14,7 @@ export const validateLogin = (
 		next();
 	} catch (error) {
 		if (error instanceof ZodError) {
-			next(createAppError("Validation failed", 400));
+			next(createAppError("Validation failed", HTTP_STATUS.BAD_REQUEST));
 		} else {
 			next(error);
 		}
@@ -30,7 +31,7 @@ export const validateRegistration = (
 		next();
 	} catch (error) {
 		if (error instanceof ZodError) {
-			next(createAppError("Validation failed", 400));
+			next(createAppError("Validation failed", HTTP_STATUS.BAD_REQUEST));
 		} else {
 			next(error);
 		}

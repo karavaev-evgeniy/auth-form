@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
 import type {
 	AuthResult,
@@ -15,7 +16,7 @@ const handleAuthentication = (result: AuthResult, res: Response) => {
 	} else {
 		throw createAppError(
 			result.message || "Authentication failed",
-			result.status || 400,
+			result.status || HTTP_STATUS.BAD_REQUEST,
 		);
 	}
 };
@@ -57,7 +58,7 @@ export const getUser = async (
 		const token = cookieService.getAuthCookie(req);
 
 		if (!token) {
-			throw createAppError("Not authenticated", 401);
+			throw createAppError("Not authenticated", HTTP_STATUS.UNAUTHORIZED);
 		}
 
 		const result = await authService.getUserFromToken(token);
@@ -67,7 +68,7 @@ export const getUser = async (
 		} else {
 			throw createAppError(
 				result.message || "Failed to get user",
-				result.status || 400,
+				result.status || HTTP_STATUS.BAD_REQUEST,
 			);
 		}
 	} catch (error) {

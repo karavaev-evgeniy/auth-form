@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
 import type { AuthResult, IServerUser, IUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
@@ -19,7 +20,7 @@ const verifyAndDecodeToken = (token: string): { id: number; email: string } => {
 		return jwt.verify(token, JWT_SECRET) as { id: number; email: string };
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
-			throw createAppError("Invalid token", 401);
+			throw createAppError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
 		}
 
 		throw error;
@@ -30,7 +31,7 @@ const getUserById = (id: number): IServerUser => {
 	const user = users.find((u) => u.id === id);
 
 	if (!user) {
-		throw createAppError("User not found", 404);
+		throw createAppError("User not found", HTTP_STATUS.NOT_FOUND);
 	}
 	return user;
 };
