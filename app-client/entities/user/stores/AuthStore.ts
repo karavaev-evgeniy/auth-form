@@ -1,4 +1,10 @@
 import type {
+	ApiSuccessResponse,
+	AuthResponse,
+	UserCheckResponse,
+	UserResponse,
+} from "@shared/types/api";
+import type {
 	ILoginCredentials,
 	IRegistrationCredentials,
 	IUser,
@@ -14,11 +20,11 @@ class AuthStore {
 		makeAutoObservable(this);
 	}
 
-	login = async (credentials: ILoginCredentials) => {
+	login = async (credentials: ILoginCredentials): Promise<AuthResponse> => {
 		const result = await UserService.login(credentials);
 
 		runInAction(() => {
-			if (result.success && result.data) {
+			if (this.isAuthSuccessResponse(result)) {
 				this.isAuthenticated = true;
 				this.user = result.data;
 			}
@@ -27,25 +33,29 @@ class AuthStore {
 		return result;
 	};
 
-	register = async (credentials: IRegistrationCredentials) => {
+	register = async (
+		credentials: IRegistrationCredentials,
+	): Promise<AuthResponse> => {
 		const result = await UserService.register(credentials);
 
 		runInAction(() => {
-			if (result.success && result.data) {
+			if (this.isAuthSuccessResponse(result)) {
 				this.isAuthenticated = true;
 				this.user = result.data;
 			}
 		});
 
-		return result.success;
+		return result;
 	};
 
 	logout = async () => {
-		await UserService.logout();
+		const result = await UserService.logout();
 
 		runInAction(() => {
-			this.isAuthenticated = false;
-			this.user = null;
+			if (result.success) {
+				this.isAuthenticated = false;
+				this.user = null;
+			}
 		});
 	};
 
@@ -53,10 +63,27 @@ class AuthStore {
 		const result = await UserService.checkAuth();
 
 		runInAction(() => {
-			this.isAuthenticated = result.success && !!result.data;
-			this.user = result.data || null;
+			if (this.isUserCheckSuccessResponse(result)) {
+				this.isAuthenticated = true;
+				this.user = result.data;
+			} else {
+				this.isAuthenticated = false;
+				this.user = null;
+			}
 		});
 	};
+
+	private isAuthSuccessResponse(
+		response: AuthResponse,
+	): response is ApiSuccessResponse<UserResponse & { token: string }> {
+		return response.success;
+	}
+
+	private isUserCheckSuccessResponse(
+		response: UserCheckResponse,
+	): response is ApiSuccessResponse<UserResponse> {
+		return response.success;
+	}
 }
 
 export const authStore = new AuthStore();

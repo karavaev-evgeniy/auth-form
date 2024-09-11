@@ -27,11 +27,11 @@ export const authenticateToken = async (
 	try {
 		const result = await authService.verifyToken(token);
 
-		if (!result.success || !result.user) {
+		if (!result.success || !result.data) {
 			return next(createAppError("Invalid token", HTTP_STATUS.UNAUTHORIZED));
 		}
 
-		req.user = result.user;
+		req.user = result.data;
 		next();
 	} catch (error) {
 		next(error);

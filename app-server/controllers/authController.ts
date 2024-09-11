@@ -3,7 +3,7 @@ import { createAppError } from "@server/middleware/errorMiddleware";
 import type {
 	ApiResponse,
 	AuthResponse,
-	UserResponse,
+	UserCheckResponse,
 } from "@shared/types/api";
 import type {
 	ILoginCredentials,
@@ -14,8 +14,8 @@ import * as authService from "../services/authService";
 import * as cookieService from "../services/cookieService";
 
 const handleAuthentication = (result: AuthResponse, res: Response) => {
-	if (result.success && result.data && result.token) {
-		cookieService.setAuthCookie(res, result.token);
+	if (result.success && result.data) {
+		cookieService.setAuthCookie(res, result.data.token);
 		res.json(result);
 	} else {
 		throw createAppError(
@@ -55,7 +55,7 @@ export const register = async (
 
 export const getUser = async (
 	req: Request,
-	res: Response<ApiResponse<UserResponse>>,
+	res: Response<UserCheckResponse>,
 	next: NextFunction,
 ) => {
 	try {
@@ -82,12 +82,12 @@ export const getUser = async (
 
 export const logout = (
 	req: Request,
-	res: Response<ApiResponse>,
+	res: Response<ApiResponse<void>>,
 	next: NextFunction,
 ) => {
 	try {
 		cookieService.clearAuthCookie(res);
-		res.json({ success: true });
+		res.json({ success: true, data: undefined });
 	} catch (error) {
 		next(error);
 	}

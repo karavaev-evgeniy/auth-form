@@ -8,6 +8,7 @@ import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import "./AuthForm.scss";
 import { UserService } from "@client/entities/user/services/UserService";
+import type { ApiErrorResponse, AuthResponse } from "@shared/types/api";
 import type {
 	ILoginErrors,
 	IRegistrationCredentials,
@@ -50,32 +51,41 @@ const AuthForm = observer(() => {
 
 		if (validateForm()) {
 			if (isRegistration) {
-				const success = await authStore.register(credentials);
-
-				if (success) {
-					navigation.goToHome();
-				} else {
-					setErrors({ ...errors, general: "Registration failed" });
-				}
+				const result = await authStore.register(credentials);
+				handleAuthResult(result);
 			} else {
 				const result = await authStore.login(credentials);
-
-				if (result.success) {
-					navigation.goToHome();
-				} else {
-					if (result.message === "User not found") {
-						setErrors({
-							...errors,
-							general: "User not found. Registration required.",
-						});
-
-						setIsRegistration(true);
-					} else {
-						setErrors({ ...errors, general: result.message || "Login failed" });
-					}
-				}
+				handleAuthResult(result);
 			}
 		}
+	};
+
+	const handleAuthResult = (result: AuthResponse | ApiErrorResponse) => {
+		if (result.success) {
+			navigation.goToHome();
+		} else {
+			handleApiErrors(result);
+		}
+	};
+
+	const handleApiErrors = (errorResponse: ApiErrorResponse) => {
+		const newErrors: ILoginErrors = { ...errors };
+
+		if (errorResponse.errors) {
+			for (let i = 0; i < errorResponse.errors.length; i++) {
+				const error = errorResponse.errors[i];
+				newErrors[error.field as keyof ILoginErrors] = error.message;
+			}
+		} else {
+			if (errorResponse.message === "User not found" && !isRegistration) {
+				setIsRegistration(true);
+				newErrors.general = "User not found. Registration required.";
+			} else {
+				newErrors.general = errorResponse.message;
+			}
+		}
+
+		setErrors(newErrors);
 	};
 
 	return (
@@ -85,7 +95,6 @@ const AuthForm = observer(() => {
 					<ULabel className="auth-form__label" htmlFor="email">
 						Email
 					</ULabel>
-
 					<UInput
 						id="email"
 						name="email"
@@ -97,7 +106,6 @@ const AuthForm = observer(() => {
 						}
 						autoComplete="username"
 					/>
-
 					{errors.email && (
 						<div className="auth-form__error">{errors.email}</div>
 					)}
@@ -107,7 +115,6 @@ const AuthForm = observer(() => {
 					<ULabel className="auth-form__label" htmlFor="password">
 						Password
 					</ULabel>
-
 					<UInputPassword
 						id="password"
 						name="password"
@@ -118,7 +125,6 @@ const AuthForm = observer(() => {
 						}
 						autoComplete={isRegistration ? "new-password" : "current-password"}
 					/>
-
 					{errors.password && (
 						<div className="auth-form__error">{errors.password}</div>
 					)}
@@ -129,7 +135,6 @@ const AuthForm = observer(() => {
 						<ULabel className="auth-form__label" htmlFor="confirmPassword">
 							Confirm Password
 						</ULabel>
-
 						<UInputPassword
 							id="confirmPassword"
 							name="confirmPassword"
@@ -143,7 +148,6 @@ const AuthForm = observer(() => {
 							}
 							autoComplete="new-password"
 						/>
-
 						{errors.confirmPassword && (
 							<div className="auth-form__error">{errors.confirmPassword}</div>
 						)}

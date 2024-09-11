@@ -1,6 +1,6 @@
 import { HTTP_STATUS } from "@server/constants/httpStatus";
 import { createAppError } from "@server/middleware/errorMiddleware";
-import type { AuthResponse } from "@shared/types/api";
+import type { AuthResponse, UserCheckResponse } from "@shared/types/api";
 import type { IServerUser, IUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
@@ -23,7 +23,6 @@ const verifyAndDecodeToken = (token: string): { id: number; email: string } => {
 		if (error instanceof jwt.JsonWebTokenError) {
 			throw createAppError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
 		}
-
 		throw error;
 	}
 };
@@ -37,10 +36,9 @@ const getUserById = (id: number): IServerUser => {
 	return user;
 };
 
-const createAuthResult = (user: IUser, token?: string): AuthResponse => ({
+const createAuthResult = (user: IUser, token: string): AuthResponse => ({
 	success: true,
-	data: { id: user.id, email: user.email },
-	token,
+	data: { id: user.id, email: user.email, token },
 });
 
 export const authenticateUser = async (
@@ -69,6 +67,7 @@ export const registerUser = async (
 	if (findUser(email)) {
 		throw createAppError("User already exists", HTTP_STATUS.BAD_REQUEST);
 	}
+
 	const newUser: IServerUser = {
 		id: users.length + 1,
 		email,
@@ -84,7 +83,7 @@ export const registerUser = async (
 
 export const getUserFromToken = async (
 	token: string,
-): Promise<AuthResponse> => {
+): Promise<UserCheckResponse> => {
 	if (!token) {
 		throw createAppError("Not authenticated", HTTP_STATUS.UNAUTHORIZED);
 	}
@@ -92,12 +91,20 @@ export const getUserFromToken = async (
 	const decoded = verifyAndDecodeToken(token);
 	const user = getUserById(decoded.id);
 
-	return createAuthResult(user);
+	return {
+		success: true,
+		data: { id: user.id, email: user.email },
+	};
 };
 
-export const verifyToken = async (token: string): Promise<AuthResponse> => {
+export const verifyToken = async (
+	token: string,
+): Promise<UserCheckResponse> => {
 	const decoded = verifyAndDecodeToken(token);
 	const user = getUserById(decoded.id);
 
-	return createAuthResult(user);
+	return {
+		success: true,
+		data: { id: user.id, email: user.email },
+	};
 };

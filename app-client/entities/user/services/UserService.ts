@@ -1,13 +1,13 @@
 import type {
+	ApiErrorResponse,
 	ApiResponse,
 	AuthResponse,
-	UserResponse,
+	UserCheckResponse,
 } from "@shared/types/api";
 import type {
 	ILoginCredentials,
 	ILoginErrors,
 	IRegistrationCredentials,
-	IUser,
 } from "@shared/types/user";
 import { loginSchema, registrationSchema } from "@shared/types/user";
 import { z } from "zod";
@@ -83,10 +83,10 @@ export const UserService = {
 			const data = await response.json();
 
 			if (!response.ok) {
-				return { success: false, message: data.message };
+				return data as ApiErrorResponse;
 			}
 
-			return data;
+			return data as AuthResponse;
 		} catch (error) {
 			console.error("Login error:", error);
 			return { success: false, message: "An error occurred during login" };
@@ -104,34 +104,64 @@ export const UserService = {
 				credentials: "include",
 			});
 
-			return await response.json();
+			const data = await response.json();
+
+			if (!response.ok) {
+				return data as ApiErrorResponse;
+			}
+
+			return data as AuthResponse;
 		} catch (error) {
 			console.error("Registration error:", error);
-			return { success: false };
+			return {
+				success: false,
+				message: "An error occurred during registration",
+			};
 		}
 	},
 
-	async logout(): Promise<void> {
+	async logout(): Promise<ApiResponse<void>> {
 		try {
-			await fetch(`${BASE_URL}/logout`, {
+			const response = await fetch(`${BASE_URL}/logout`, {
 				method: "POST",
 				credentials: "include",
 			});
+
+			if (!response.ok) {
+				return { success: false, message: "Logout failed" };
+			}
+
+			return { success: true, data: undefined };
 		} catch (error) {
 			console.error("Logout error:", error);
+
+			return { success: false, message: "An error occurred during logout" };
 		}
 	},
 
-	async checkAuth(): Promise<ApiResponse<UserResponse>> {
+	async checkAuth(): Promise<UserCheckResponse> {
 		try {
 			const response = await fetch(`${BASE_URL}/user`, {
 				credentials: "include",
 			});
 
-			return await response.json();
+			const data = await response.json();
+
+			if (!response.ok) {
+				return {
+					success: false,
+					message: data.message || "Failed to check authentication",
+				} as ApiErrorResponse;
+			}
+
+			return data as UserCheckResponse;
 		} catch (error) {
 			console.error("Check auth error:", error);
-			return { success: false };
+
+			return {
+				success: false,
+				message: "An error occurred while checking authentication",
+			} as ApiErrorResponse;
 		}
 	},
 };
