@@ -4,6 +4,11 @@ import { loginSchema, registrationSchema } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 
+/**
+ * Обрабатывает ошибки валидации Zod.
+ * @param {ZodError} error - Объект ошибки Zod.
+ * @returns {ApiErrorResponse} Объект с информацией об ошибках валидации.
+ */
 const handleValidationError = (error: ZodError): ApiErrorResponse => {
 	return {
 		success: false,
@@ -15,6 +20,12 @@ const handleValidationError = (error: ZodError): ApiErrorResponse => {
 	};
 };
 
+/**
+ * Middleware для валидации данных входа.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const validateLogin = (
 	req: Request,
 	res: Response<ApiErrorResponse>,
@@ -32,6 +43,12 @@ export const validateLogin = (
 	}
 };
 
+/**
+ * Middleware для валидации данных регистрации.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const validateRegistration = (
 	req: Request,
 	res: Response<ApiErrorResponse>,

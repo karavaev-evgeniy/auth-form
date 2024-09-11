@@ -6,16 +6,31 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { users } from "../models/User";
 
+/**
+ * Находит пользователя по email.
+ * @param {string} email - Email пользователя.
+ * @returns {IServerUser | undefined} Найденный пользователь или undefined.
+ */
 const findUser = (email: string): IServerUser | undefined => {
 	return users.find((u) => u.email === email);
 };
 
+/**
+ * Создает JWT токен для пользователя.
+ * @param {IUser} user - Объект пользователя.
+ * @returns {string} JWT токен.
+ */
 const createToken = (user: IUser): string => {
 	return jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
 		expiresIn: "1h",
 	});
 };
 
+/**
+ * Проверяет и декодирует JWT токен.
+ * @param {string} token - JWT токен.
+ * @returns {{ id: number; email: string }} Декодированные данные пользователя.
+ */
 const verifyAndDecodeToken = (token: string): { id: number; email: string } => {
 	try {
 		return jwt.verify(token, JWT_SECRET) as { id: number; email: string };
@@ -27,6 +42,12 @@ const verifyAndDecodeToken = (token: string): { id: number; email: string } => {
 	}
 };
 
+/**
+ * Находит пользователя по ID.
+ * @param {number} id - ID пользователя.
+ * @returns {IServerUser} Найденный пользователь.
+ * @throws {AppError} Если пользователь не найден.
+ */
 const getUserById = (id: number): IServerUser => {
 	const user = users.find((u) => u.id === id);
 
@@ -36,11 +57,23 @@ const getUserById = (id: number): IServerUser => {
 	return user;
 };
 
+/**
+ * Создает объект результата аутентификации.
+ * @param {IUser} user - Объект пользователя.
+ * @param {string} token - JWT токен.
+ * @returns {AuthResponse} Объект результата аутентификации.
+ */
 const createAuthResult = (user: IUser, token: string): AuthResponse => ({
 	success: true,
 	data: { id: user.id, email: user.email, token },
 });
 
+/**
+ * Аутентифицирует пользователя по email и паролю.
+ * @param {string} email - Email пользователя.
+ * @param {string} password - Пароль пользователя.
+ * @returns {Promise<AuthResponse>} Результат аутентификации.
+ */
 export const authenticateUser = async (
 	email: string,
 	password: string,
@@ -60,6 +93,12 @@ export const authenticateUser = async (
 	return createAuthResult(user, token);
 };
 
+/**
+ * Регистрирует нового пользователя.
+ * @param {string} email - Email пользователя.
+ * @param {string} password - Пароль пользователя.
+ * @returns {Promise<AuthResponse>} Результат регистрации.
+ */
 export const registerUser = async (
 	email: string,
 	password: string,
@@ -81,6 +120,11 @@ export const registerUser = async (
 	return createAuthResult(newUser, token);
 };
 
+/**
+ * Получает информацию о пользователе из токена.
+ * @param {string} token - JWT токен.
+ * @returns {Promise<UserCheckResponse>} Информация о пользователе.
+ */
 export const getUserFromToken = async (
 	token: string,
 ): Promise<UserCheckResponse> => {
@@ -97,6 +141,11 @@ export const getUserFromToken = async (
 	};
 };
 
+/**
+ * Проверяет валидность токена и возвращает информацию о пользователе.
+ * @param {string} token - JWT токен.
+ * @returns {Promise<UserCheckResponse>} Информация о пользователе.
+ */
 export const verifyToken = async (
 	token: string,
 ): Promise<UserCheckResponse> => {

@@ -13,6 +13,11 @@ import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
 import * as cookieService from "../services/cookieService";
 
+/**
+ * Обрабатывает результат аутентификации и отправляет ответ клиенту.
+ * @param {AuthResponse} result - Результат аутентификации.
+ * @param {Response} res - Объект ответа Express.
+ */
 const handleAuthentication = (result: AuthResponse, res: Response) => {
 	if (result.success && result.data) {
 		cookieService.setAuthCookie(res, result.data.token);
@@ -25,6 +30,12 @@ const handleAuthentication = (result: AuthResponse, res: Response) => {
 	}
 };
 
+/**
+ * Обрабатывает запрос на вход пользователя.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const login = async (
 	req: Request,
 	res: Response<AuthResponse>,
@@ -39,6 +50,12 @@ export const login = async (
 	}
 };
 
+/**
+ * Обрабатывает запрос на регистрацию нового пользователя.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const register = async (
 	req: Request,
 	res: Response<AuthResponse>,
@@ -53,6 +70,12 @@ export const register = async (
 	}
 };
 
+/**
+ * Получает информацию о текущем пользователе.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const getUser = async (
 	req: Request,
 	res: Response<UserCheckResponse>,
@@ -80,6 +103,12 @@ export const getUser = async (
 	}
 };
 
+/**
+ * Обрабатывает запрос на выход пользователя.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const logout = (
 	req: Request,
 	res: Response<ApiResponse<void>>,

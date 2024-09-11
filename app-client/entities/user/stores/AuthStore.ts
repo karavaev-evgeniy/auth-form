@@ -20,6 +20,11 @@ class AuthStore {
 		makeAutoObservable(this);
 	}
 
+	/**
+	 * Выполняет вход пользователя.
+	 * @param {ILoginCredentials} credentials - Данные для входа.
+	 * @returns {Promise<AuthResponse>} Результат входа.
+	 */
 	login = async (credentials: ILoginCredentials): Promise<AuthResponse> => {
 		const result = await UserService.login(credentials);
 
@@ -33,6 +38,11 @@ class AuthStore {
 		return result;
 	};
 
+	/**
+	 * Выполняет регистрацию пользователя.
+	 * @param {IRegistrationCredentials} credentials - Данные для регистрации.
+	 * @returns {Promise<AuthResponse>} Результат регистрации.
+	 */
 	register = async (
 		credentials: IRegistrationCredentials,
 	): Promise<AuthResponse> => {
@@ -48,6 +58,9 @@ class AuthStore {
 		return result;
 	};
 
+	/**
+	 * Выполняет выход пользователя.
+	 */
 	logout = async () => {
 		const result = await UserService.logout();
 
@@ -59,6 +72,9 @@ class AuthStore {
 		});
 	};
 
+	/**
+	 * Проверяет статус аутентификации пользователя.
+	 */
 	checkAuth = async () => {
 		const result = await UserService.checkAuth();
 

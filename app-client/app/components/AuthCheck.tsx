@@ -3,6 +3,11 @@ import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import "./AuthCheck.scss";
 
+/**
+ * Компонент для проверки аутентификации пользователя.
+ * Отображает экран загрузки, пока проверяется статус аутентификации.
+ * @param {React.ReactNode} children - Дочерние компоненты, которые будут отображены после проверки аутентификации.
+ */
 const AuthCheck = observer(({ children }) => {
 	const { authStore } = useContext(StoreContext);
 	const [isChecking, setIsChecking] = useState(true);

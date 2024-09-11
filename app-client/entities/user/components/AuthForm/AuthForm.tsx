@@ -14,6 +14,10 @@ import type {
 	IRegistrationCredentials,
 } from "@shared/types/user";
 
+/**
+ * Компонент формы аутентификации.
+ * Обрабатывает вход и регистрацию пользователя.
+ */
 const AuthForm = observer(() => {
 	const { authStore } = useContext(StoreContext);
 	const navigation = useNavigation();
@@ -33,6 +37,10 @@ const AuthForm = observer(() => {
 		general: "",
 	});
 
+	/**
+	 * Валидирует форму перед отправкой.
+	 * @returns {boolean} Результат валидации.
+	 */
 	const validateForm = () => {
 		const { isValid, errors: validationErrors } = isRegistration
 			? UserService.validateRegistrationForm(credentials)
@@ -46,6 +54,10 @@ const AuthForm = observer(() => {
 		return isValid;
 	};
 
+	/**
+	 * Обрабатывает отправку формы.
+	 * @param {React.FormEvent} event - Событие отправки формы.
+	 */
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
@@ -60,6 +72,10 @@ const AuthForm = observer(() => {
 		}
 	};
 
+	/**
+	 * Обрабатывает результат аутентификации.
+	 * @param {AuthResponse | ApiErrorResponse} result - Результат запроса аутентификации.
+	 */
 	const handleAuthResult = (result: AuthResponse | ApiErrorResponse) => {
 		if (result.success) {
 			navigation.goToHome();
@@ -68,6 +84,10 @@ const AuthForm = observer(() => {
 		}
 	};
 
+	/**
+	 * Обрабатывает ошибки API.
+	 * @param {ApiErrorResponse} errorResponse - Ответ с ошибкой от API.
+	 */
 	const handleApiErrors = (errorResponse: ApiErrorResponse) => {
 		const newErrors: ILoginErrors = { ...errors };
 

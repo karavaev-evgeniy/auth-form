@@ -14,6 +14,11 @@ import axios from "axios";
 import { z } from "zod";
 
 export const UserService = {
+	/**
+	 * Валидирует форму входа.
+	 * @param {ILoginCredentials} credentials - Данные для входа.
+	 * @returns {{ isValid: boolean; errors: ILoginErrors }} Результат валидации.
+	 */
 	validateLoginForm: (
 		credentials: ILoginCredentials,
 	): { isValid: boolean; errors: ILoginErrors } => {
@@ -39,6 +44,11 @@ export const UserService = {
 		}
 	},
 
+	/**
+	 * Валидирует форму регистрации.
+	 * @param {IRegistrationCredentials} credentials - Данные для регистрации.
+	 * @returns {{ isValid: boolean; errors: ILoginErrors }} Результат валидации.
+	 */
 	validateRegistrationForm: (
 		credentials: IRegistrationCredentials,
 	): { isValid: boolean; errors: ILoginErrors } => {
@@ -68,6 +78,11 @@ export const UserService = {
 		}
 	},
 
+	/**
+	 * Выполняет запрос на вход пользователя.
+	 * @param {ILoginCredentials} credentials - Данные для входа.
+	 * @returns {Promise<AuthResponse>} Результат входа.
+	 */
 	async login(credentials: ILoginCredentials): Promise<AuthResponse> {
 		try {
 			const { data } = await authApi.login(credentials);
@@ -80,6 +95,11 @@ export const UserService = {
 		}
 	},
 
+	/**
+	 * Выполняет запрос на регистрацию пользователя.
+	 * @param {IRegistrationCredentials} credentials - Данные для регистрации.
+	 * @returns {Promise<AuthResponse>} Результат регистрации.
+	 */
 	async register(credentials: IRegistrationCredentials): Promise<AuthResponse> {
 		try {
 			const { data } = await authApi.register(credentials);
@@ -95,6 +115,10 @@ export const UserService = {
 		}
 	},
 
+	/**
+	 * Выполняет запрос на выход пользователя.
+	 * @returns {Promise<{ success: boolean; message?: string }>} Результат выхода.
+	 */
 	async logout(): Promise<{ success: boolean; message?: string }> {
 		try {
 			await authApi.logout();
@@ -105,6 +129,10 @@ export const UserService = {
 		}
 	},
 
+	/**
+	 * Проверяет статус аутентификации пользователя.
+	 * @returns {Promise<UserCheckResponse>} Результат проверки аутентификации.
+	 */
 	async checkAuth(): Promise<UserCheckResponse> {
 		try {
 			const { data } = await authApi.checkAuth();

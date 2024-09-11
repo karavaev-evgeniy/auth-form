@@ -8,6 +8,12 @@ export interface AppError {
 	isOperational: boolean;
 }
 
+/**
+ * Создает объект ошибки приложения.
+ * @param {string} message - Сообщение об ошибке.
+ * @param {HttpStatus} statusCode - HTTP статус код ошибки.
+ * @returns {AppError} Объект ошибки приложения.
+ */
 export function createAppError(
 	message: string,
 	statusCode: HttpStatus,
@@ -19,6 +25,13 @@ export function createAppError(
 	};
 }
 
+/**
+ * Middleware для обработки ошибок.
+ * @param {AppError | Error} err - Объект ошибки.
+ * @param {Request} req - Объект запроса Express.
+ * @param {Response} res - Объект ответа Express.
+ * @param {NextFunction} next - Функция перехода к следующему middleware.
+ */
 export const errorHandler = (
 	err: AppError | Error,
 	req: Request,
