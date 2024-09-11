@@ -1,9 +1,9 @@
-import { HTTP_STATUS } from "@server/constants/httpStatus";
-import { createAppError } from "@server/middleware/errorMiddleware";
 import type { AuthResponse, UserCheckResponse } from "@shared/types/api";
-import type { IServerUser, IUser } from "@shared/types/user";
 import jwt from "jsonwebtoken";
+import type { IServerUser, IUser } from "../../app-shared/types/user";
 import { JWT_SECRET } from "../config";
+import { HTTP_STATUS } from "../constants/httpStatus";
+import { createAppError } from "../middleware/errorMiddleware";
 import { users } from "../models/User";
 
 /**

@@ -1,8 +1,8 @@
-import { HTTP_STATUS } from "@server/constants/httpStatus";
-import type { ApiErrorResponse } from "@shared/types/api";
-import { loginSchema, registrationSchema } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import type { ApiErrorResponse } from "../../app-shared/types/api";
+import { loginSchema, registrationSchema } from "../../app-shared/types/user";
+import { HTTP_STATUS } from "../constants/httpStatus";
 
 /**
  * Обрабатывает ошибки валидации Zod.

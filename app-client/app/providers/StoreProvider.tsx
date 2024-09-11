@@ -1,11 +1,11 @@
 import { authStore } from "@client/entities/user/stores/AuthStore";
-import React, { createContext } from "react";
+import { type ReactNode, createContext } from "react";
 
 export const StoreContext = createContext({
 	authStore,
 });
 
-export const StoreProvider = ({ children }) => {
+export const StoreProvider = ({ children }: { children: ReactNode }) => {
 	return (
 		<StoreContext.Provider value={{ authStore }}>
 			{children}

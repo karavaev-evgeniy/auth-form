@@ -1,10 +1,11 @@
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { useNavigation } from "@client/shared/hooks/useNavigation";
-import UButton from "@client/shared/ui/UButton/UButton.tsx";
-import UInput from "@client/shared/ui/UInput/UInput.tsx";
-import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword.tsx";
-import ULabel from "@client/shared/ui/ULabel/ULabel.tsx";
+import UButton from "@client/shared/ui/UButton/UButton";
+import UInput from "@client/shared/ui/UInput/UInput";
+import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword";
+import ULabel from "@client/shared/ui/ULabel/ULabel";
 import { observer } from "mobx-react-lite";
+import type React from "react";
 import { useCallback, useContext, useState } from "react";
 import "./AuthForm.scss";
 import { UserService } from "@client/entities/user/services/UserService";
@@ -66,7 +67,7 @@ const AuthForm = observer(() => {
 	 * Обрабатывает отправку формы.
 	 * @param {React.FormEvent} event - Событие отправки формы.
 	 */
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
 		if (validateForm()) {

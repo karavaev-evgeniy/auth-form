@@ -1,8 +1,8 @@
-import { errorHandler } from "@server/middleware/errorMiddleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import { CLIENT_URL } from "./config";
+import { errorHandler } from "./middleware/errorMiddleware";
 import authRoutes from "./routes/authRoutes";
 
 const app = express();

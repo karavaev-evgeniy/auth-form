@@ -1,4 +1,4 @@
-import App from "@client/app/App.tsx";
+import App from "@client/app/App";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@client/shared/styles/default.scss";

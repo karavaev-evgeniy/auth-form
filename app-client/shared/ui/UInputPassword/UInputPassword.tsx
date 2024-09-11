@@ -35,8 +35,10 @@ function UInputPassword({ id, ...props }: UInputPasswordProps) {
 				aria-pressed={showPassword}
 			>
 				{showPassword ? (
+					// @ts-ignore
 					<EyeSlashIcon className="u-input-password__icon" />
 				) : (
+					// @ts-ignore
 					<EyeIcon className="u-input-password__icon" />
 				)}
 			</button>

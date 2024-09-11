@@ -1,9 +1,9 @@
-import { HTTP_STATUS } from "@server/constants/httpStatus";
-import { createAppError } from "@server/middleware/errorMiddleware";
 import type { IUser } from "@shared/types/user";
 import type { NextFunction, Request, Response } from "express";
+import { HTTP_STATUS } from "../constants/httpStatus";
 import * as authService from "../services/authService";
 import * as cookieService from "../services/cookieService";
+import { createAppError } from "./errorMiddleware";
 
 declare global {
 	namespace Express {

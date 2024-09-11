@@ -1,6 +1,6 @@
-import { HTTP_STATUS, type HttpStatus } from "@server/constants/httpStatus";
-import type { ApiResponse } from "@shared/types/api";
 import type { NextFunction, Request, Response } from "express";
+import type { ApiResponse } from "../../app-shared/types/api";
+import { HTTP_STATUS, type HttpStatus } from "../constants/httpStatus";
 
 export interface AppError {
 	message: string;

@@ -1,10 +1,10 @@
 import { StoreContext } from "@client/app/providers/StoreProvider";
 import { ROUTES } from "@client/app/types/router";
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { type ReactNode, useContext } from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = observer(({ children }) => {
+const ProtectedRoute = observer(({ children }: { children: ReactNode }) => {
 	const { authStore } = useContext(StoreContext);
 
 	if (!authStore.isAuthenticated) {
