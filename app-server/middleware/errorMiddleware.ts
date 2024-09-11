@@ -35,7 +35,7 @@ export function createAppError(
 export const errorHandler = (
 	err: AppError | Error,
 	req: Request,
-	res: Response<ApiResponse>,
+	res: Response<ApiResponse<void>>, // Изменено здесь
 	next: NextFunction,
 ) => {
 	if ("statusCode" in err && "isOperational" in err) {

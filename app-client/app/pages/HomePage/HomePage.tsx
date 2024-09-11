@@ -25,8 +25,9 @@ const HomePage = observer(() => {
 				className="home-page__logout"
 				type="button"
 				onClick={handleLogout}
+				aria-label="Logout from profile"
 			>
-				Выйти
+				Logout
 			</button>
 		</div>
 	);

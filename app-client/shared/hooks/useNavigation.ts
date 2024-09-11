@@ -7,6 +7,5 @@ export const useNavigation = () => {
 	return {
 		goToHome: () => navigate(ROUTES.HOME),
 		goToLogin: () => navigate(ROUTES.LOGIN),
-		goBack: () => navigate(-1),
 	};
 };

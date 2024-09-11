@@ -8,8 +8,9 @@ import EyeIcon from "@client/shared/icons/eye.svg";
 interface UInputPasswordProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-function UInputPassword({ ...props }: UInputPasswordProps) {
+function UInputPassword({ id, ...props }: UInputPasswordProps) {
 	const [showPassword, setShowPassword] = useState(false);
+	const toggleId = `${id}-toggle`;
 
 	const toggleShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -18,16 +19,20 @@ function UInputPassword({ ...props }: UInputPasswordProps) {
 	return (
 		<div className="u-input-password">
 			<UInput
+				id={id}
 				type={showPassword ? "text" : "password"}
 				className="u-input-password__field"
 				{...props}
 			/>
 
 			<button
+				id={toggleId}
 				type="button"
 				onClick={toggleShowPassword}
 				className="u-input-password__toggle"
-				title={showPassword ? "Скрыть пароль" : "Показать пароль"}
+				title={showPassword ? "Hide password" : "Show password"}
+				aria-label={showPassword ? "Hide password" : "Show password"}
+				aria-pressed={showPassword}
 			>
 				{showPassword ? (
 					<EyeSlashIcon className="u-input-password__icon" />

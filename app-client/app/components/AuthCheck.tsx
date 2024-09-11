@@ -29,7 +29,9 @@ const AuthCheck = observer(({ children }) => {
 	if (isChecking) {
 		return (
 			<main className="auth-check">
-				<h1 className="auth-check__text">Checking authorization...</h1>
+				<h1 className="auth-check__text" role="status" aria-live="polite">
+					Checking authorization...
+				</h1>
 			</main>
 		);
 	}

@@ -5,7 +5,7 @@ import UInput from "@client/shared/ui/UInput/UInput.tsx";
 import UInputPassword from "@client/shared/ui/UInputPassword/UInputPassword.tsx";
 import ULabel from "@client/shared/ui/ULabel/ULabel.tsx";
 import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import "./AuthForm.scss";
 import { UserService } from "@client/entities/user/services/UserService";
 import type { ApiErrorResponse, AuthResponse } from "@shared/types/api";
@@ -36,6 +36,14 @@ const AuthForm = observer(() => {
 		confirmPassword: "",
 		general: "",
 	});
+
+	const handleInputChange = useCallback(
+		(field: keyof IRegistrationCredentials, value: string) => {
+			setCredentials((prev) => ({ ...prev, [field]: value }));
+			setErrors((prev) => ({ ...prev, [field]: "", general: "" }));
+		},
+		[],
+	);
 
 	/**
 	 * Валидирует форму перед отправкой.
@@ -109,25 +117,29 @@ const AuthForm = observer(() => {
 	};
 
 	return (
-		<form className="auth-form" onSubmit={handleSubmit}>
+		<form aria-live="polite" className="auth-form" onSubmit={handleSubmit}>
 			<div className="auth-form__fields">
 				<div className="auth-form__row">
 					<ULabel className="auth-form__label" htmlFor="email">
 						Email
 					</ULabel>
+
 					<UInput
 						id="email"
 						name="email"
 						type="email"
 						placeholder="@"
 						value={credentials.email}
-						onChange={(e) =>
-							setCredentials({ ...credentials, email: e.target.value })
-						}
+						onChange={(e) => handleInputChange("email", e.target.value)}
 						autoComplete="username"
+						aria-invalid={!!errors.email}
+						aria-describedby={errors.email ? "email-error" : undefined}
 					/>
+
 					{errors.email && (
-						<div className="auth-form__error">{errors.email}</div>
+						<div id="email-error" className="auth-form__error" role="alert">
+							{errors.email}
+						</div>
 					)}
 				</div>
 
@@ -135,18 +147,22 @@ const AuthForm = observer(() => {
 					<ULabel className="auth-form__label" htmlFor="password">
 						Password
 					</ULabel>
+
 					<UInputPassword
 						id="password"
 						name="password"
 						placeholder="*"
 						value={credentials.password}
-						onChange={(e) =>
-							setCredentials({ ...credentials, password: e.target.value })
-						}
+						onChange={(e) => handleInputChange("password", e.target.value)}
 						autoComplete={isRegistration ? "new-password" : "current-password"}
+						aria-invalid={!!errors.password}
+						aria-describedby={errors.password ? "password-error" : undefined}
 					/>
+
 					{errors.password && (
-						<div className="auth-form__error">{errors.password}</div>
+						<div id="password-error" className="auth-form__error" role="alert">
+							{errors.password}
+						</div>
 					)}
 				</div>
 
@@ -155,28 +171,39 @@ const AuthForm = observer(() => {
 						<ULabel className="auth-form__label" htmlFor="confirmPassword">
 							Confirm Password
 						</ULabel>
+
 						<UInputPassword
 							id="confirmPassword"
 							name="confirmPassword"
 							placeholder="*"
 							value={credentials.confirmPassword}
 							onChange={(e) =>
-								setCredentials({
-									...credentials,
-									confirmPassword: e.target.value,
-								})
+								handleInputChange("confirmPassword", e.target.value)
 							}
 							autoComplete="new-password"
+							aria-invalid={!!errors.confirmPassword}
+							aria-describedby={
+								errors.confirmPassword ? "confirm-password-error" : undefined
+							}
 						/>
+
 						{errors.confirmPassword && (
-							<div className="auth-form__error">{errors.confirmPassword}</div>
+							<div
+								id="confirm-password-error"
+								className="auth-form__error"
+								role="alert"
+							>
+								{errors.confirmPassword}
+							</div>
 						)}
 					</div>
 				)}
 			</div>
 
 			{errors.general && (
-				<div className="auth-form__error">{errors.general}</div>
+				<div aria-live="assertive" className="auth-form__error" role="alert">
+					{errors.general}
+				</div>
 			)}
 
 			<div className="auth-form__controls">

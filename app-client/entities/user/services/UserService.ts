@@ -15,15 +15,18 @@ import { z } from "zod";
 
 export const UserService = {
 	/**
-	 * Валидирует форму входа.
-	 * @param {ILoginCredentials} credentials - Данные для входа.
+	 * Обобщенная функция валидации формы.
+	 * @param schema - Схема валидации Zod.
+	 * @param data - Данные для валидации.
 	 * @returns {{ isValid: boolean; errors: ILoginErrors }} Результат валидации.
 	 */
-	validateLoginForm: (
-		credentials: ILoginCredentials,
-	): { isValid: boolean; errors: ILoginErrors } => {
+	validateForm<T>(
+		schema: z.ZodSchema<T>,
+		data: T,
+	): { isValid: boolean; errors: ILoginErrors } {
 		try {
-			loginSchema.parse(credentials);
+			schema.parse(data);
+
 			return { isValid: true, errors: {} };
 		} catch (error) {
 			if (error instanceof z.ZodError) {
@@ -31,9 +34,14 @@ export const UserService = {
 
 				for (let i = 0; i < error.errors.length; i++) {
 					const err = error.errors[i];
+					const field = err.path[0];
 
-					if (err.path[0] === "email" || err.path[0] === "password") {
-						errors[err.path[0]] = err.message;
+					if (
+						field === "email" ||
+						field === "password" ||
+						field === "confirmPassword"
+					) {
+						errors[field as keyof ILoginErrors] = err.message;
 					}
 				}
 
@@ -45,38 +53,20 @@ export const UserService = {
 	},
 
 	/**
+	 * Валидирует форму входа.
+	 * @param {ILoginCredentials} credentials - Данные для входа.
+	 * @returns {{ isValid: boolean; errors: ILoginErrors }} Результат валидации.
+	 */
+	validateLoginForm: (credentials: ILoginCredentials) =>
+		UserService.validateForm(loginSchema, credentials),
+
+	/**
 	 * Валидирует форму регистрации.
 	 * @param {IRegistrationCredentials} credentials - Данные для регистрации.
 	 * @returns {{ isValid: boolean; errors: ILoginErrors }} Результат валидации.
 	 */
-	validateRegistrationForm: (
-		credentials: IRegistrationCredentials,
-	): { isValid: boolean; errors: ILoginErrors } => {
-		try {
-			registrationSchema.parse(credentials);
-			return { isValid: true, errors: {} };
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				const errors: ILoginErrors = {};
-
-				for (let i = 0; i < error.errors.length; i++) {
-					const err = error.errors[i];
-
-					if (
-						err.path[0] === "email" ||
-						err.path[0] === "password" ||
-						err.path[0] === "confirmPassword"
-					) {
-						errors[err.path[0]] = err.message;
-					}
-				}
-
-				return { isValid: false, errors };
-			}
-
-			return { isValid: false, errors: { general: "Validation failed" } };
-		}
-	},
+	validateRegistrationForm: (credentials: IRegistrationCredentials) =>
+		UserService.validateForm(registrationSchema, credentials),
 
 	/**
 	 * Выполняет запрос на вход пользователя.
@@ -108,6 +98,7 @@ export const UserService = {
 			if (axios.isAxiosError(error) && error.response) {
 				return error.response.data as ApiErrorResponse;
 			}
+
 			return {
 				success: false,
 				message: "An error occurred during registration",
@@ -124,7 +115,6 @@ export const UserService = {
 			await authApi.logout();
 			return { success: true };
 		} catch (error) {
-			console.error("Logout error:", error);
 			return { success: false, message: "An error occurred during logout" };
 		}
 	},
@@ -138,7 +128,6 @@ export const UserService = {
 			const { data } = await authApi.checkAuth();
 			return data;
 		} catch (error) {
-			console.error("Check auth error:", error);
 			return {
 				success: false,
 				message: "An error occurred while checking authentication",
